@@ -18,6 +18,13 @@ namespace ChargeStationProject
 
         public void DoorOpen()
         {
+            
+            OnDoorOpen(new DoorIsOpen()
+            {
+                //hvad skal der ske
+                // DoorOpenArgs sættes til true
+            });
+            
             throw new NotImplementedException();
         }
 
