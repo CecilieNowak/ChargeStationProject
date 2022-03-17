@@ -8,12 +8,12 @@ namespace ChargeStationProject
     {
         //event ?
 
-        public void logDoorLocked(int id)
+        public void LogDoorLocked(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void logDoorUnlocked(int id)
+        public void LogDoorUnlocked(int id)
         {
             throw new NotImplementedException();
         }

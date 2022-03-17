@@ -6,5 +6,6 @@ namespace ChargeStationProject
 {
     class RfidReader : IRfidReader
     {
+        public event EventHandler<RfidDetectedEventArgs> RfidDetectedEvent;
     }
 }

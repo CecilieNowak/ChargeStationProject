@@ -6,5 +6,9 @@ namespace ChargeStationProject
 {
     class DisplayStatus : IDisplay
     {
+        public void ShowMessage()
+        {
+            Console.WriteLine();
+        }
     }
 }
