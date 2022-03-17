@@ -6,6 +6,7 @@
         {
 				// Assemble your system here from all the classes
 
+
             bool finish = false;
             do
             {
@@ -33,7 +34,7 @@
                         string idString = System.Console.ReadLine();
 
                         int id = Convert.ToInt32(idString);
-                        rfidReader.OnRfidRead(id);
+                       rfidReader.OnRfidRead(id);
                         break;
 
                     default:

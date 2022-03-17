@@ -6,12 +6,22 @@ namespace ChargeStationProject
 {
     public class Door : IDoor
     {
-        public void UnlockDoor()
+        public event EventHandler<DoorIsOpen> DoorIsOpenEvent;
+      
+        
+        protected virtual void OnDoorOpen(DoorIsOpen e)
+        {
+            DoorIsOpenEvent?.Invoke(this, e);
+        }
+
+
+
+        public void DoorOpen()
         {
             throw new NotImplementedException();
         }
 
-        public void LockDoor()
+        public void DoorClose()
         {
             throw new NotImplementedException();
         }
