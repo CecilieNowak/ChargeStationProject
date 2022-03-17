@@ -23,21 +23,28 @@ namespace ChargeStationProject
         private int _oldId;
         private IDoor _door;
 
+        public bool doorIsOpen { get; set; }
+
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
         // Her mangler constructor
+        public StationControl(IDoor door)
+        {
+            door.DoorIsOpenEvent += HandleOnDoorIsOpenEvent;
+        }
 
+        
         // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
         private void RfidDetected(int id)
         {
             switch (_state)
             {
                 case LadeskabState.Available:
-                    // Check for ladeforbindelse
+                  // Check for ladeforbindelse
                     if (_charger.Connected)
-                    {
+                  {
                         _door.LockDoor();
-                        _charger.StartCharge();
+                        _charger.StartCharge(); 
                         _oldId = id;
                         using (var writer = File.AppendText(logFile))
                         {
@@ -46,13 +53,14 @@ namespace ChargeStationProject
 
                         Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
                         _state = LadeskabState.Locked;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
-                    }
+                  } 
 
-                    break;
+                  else 
+                  { 
+                      Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen."); 
+                  } 
+
+                  break;
 
                 case LadeskabState.DoorOpen:
                     // Ignore
@@ -62,8 +70,8 @@ namespace ChargeStationProject
                     // Check for correct ID
                     if (id == _oldId)
                     {
-                        _charger.StopCharge();
-                        _door.UnlockDoor();
+                        _charger.StopCharge(); 
+                        _door.UnlockDoor(); 
                         using (var writer = File.AppendText(logFile))
                         {
                             writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
@@ -82,5 +90,11 @@ namespace ChargeStationProject
         }
 
         // Her mangler de andre trigger handlere
+        private void HandleOnDoorIsOpenEvent(object? sender, DoorIsOpen e)
+        {
+            doorIsOpen = e.DoorOpenArgs;
+            
+        }
+
     }
 }
