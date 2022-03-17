@@ -93,7 +93,7 @@ namespace ChargeStationProject
         private void HandleOnDoorIsOpenEvent(object? sender, DoorIsOpen e)
         {
             doorIsOpen = e.DoorOpenArgs;
-            
+
         }
 
     }
