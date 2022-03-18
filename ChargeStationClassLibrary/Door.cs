@@ -16,7 +16,7 @@ namespace ChargeStationProject
 
 
 
-        public void DoorOpen()
+        public void DoorOpen() // der er en med same navn i kontrol klassen
         {
             
             OnDoorOpen(new DoorIsOpen()

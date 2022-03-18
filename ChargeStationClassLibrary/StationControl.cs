@@ -22,15 +22,17 @@ namespace ChargeStationProject
         private IChargeControl _charger;
         private int _oldId;
         private IDoor _door;
+        private IDisplay _display; // CBE tilføjet
 
         public bool doorIsOpen { get; set; }
 
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
         // Her mangler constructor
-        public StationControl(IDoor door)
+        public StationControl(IDoor door,IDisplay display)
         {
             door.DoorIsOpenEvent += HandleOnDoorIsOpenEvent;
+            _display = display; //CBE tilføjet
         }
 
         
@@ -95,6 +97,16 @@ namespace ChargeStationProject
             doorIsOpen = e.DoorOpenArgs;
 
         }
+
+        public void DoorOpened()
+        {
+            _display.showMessage("Tilslut telefon");
+        }
+        public void DoorClosed()
+        {
+            _display.showMessage("Indlæs RFID");
+        }
+        // her skal koden til station messages ligge
 
     }
 }

@@ -20,5 +20,8 @@ namespace ChargeStationProject
         {
             throw new NotImplementedException();
         }
+
+        // her skal koden til charging messages ligge
+        // PhoneConnected, RFID, Error, Occupied og Remove
     }
 }
