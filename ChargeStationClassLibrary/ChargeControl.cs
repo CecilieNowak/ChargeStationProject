@@ -31,6 +31,9 @@ namespace ChargeStationProject
         {
             _UsbCharger.StartCharge();
         }
+
+        // her skal koden til charging messages ligge
+        // PhoneConnected, RFID, Error, Occupied og Remove
     }
 
    
