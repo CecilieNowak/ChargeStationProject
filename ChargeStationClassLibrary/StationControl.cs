@@ -33,6 +33,7 @@ namespace ChargeStationProject
         public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl)
         {
             _door = door;
+            _charger = chargeControl;
             _door.OpenDoorEvent += HandleOnOpenDoorEvent;
             _display = display; //CBE tilføjet
         }
@@ -46,7 +47,7 @@ namespace ChargeStationProject
             {
                 case LadeskabState.Available:
                     // Check for ladeforbindelse
-                    if (_charger.isConnected() == true) //TODO Property? .connected == true
+                    if (_charger.Connected == true) //TODO Property? .connected == true
                     {
                         _door.LockDoor();
                         _charger.startCharge();

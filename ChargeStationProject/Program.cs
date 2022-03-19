@@ -2,6 +2,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Security.Cryptography.X509Certificates;
     using ChargeStationProject;
+    using UsbSimulator;
 
 
     class Program
@@ -10,8 +11,9 @@
         static void Main(string[] args)
         {
 
-            var door = new Door();
-            var charger = new ChargeControl();
+            IDoor door = new Door();
+            IUsbCharger charger = new UsbChargerSimulator(); 
+            var chargeControl = new ChargeControl(charger);
             //var stationControl = new StationControl(door, charger); //TODO uncomment
             var arg = new DoorStateEventArgs(); //TODO hvor skal dette instantieres?
 

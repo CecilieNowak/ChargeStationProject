@@ -10,7 +10,7 @@ namespace ChargeStationProject.Test
 
     class TestDoor
     {
-        private Door _uut;
+        private IDoor _uut;
         private DoorStateEventArgs _receivedEventArgs;
 
         [SetUp]

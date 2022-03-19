@@ -45,9 +45,15 @@ namespace ChargeStationProject.Test
         [Test]
         public void DoorLocked_DoorIsOpenedEvent_LadeskabStateIsDoorLocked()
         {
-            
+            //TODO
         }
 
-    
+        [Test]
+        public void DoorUnlocked_DoorIsOpenedEvent_LadeskabStateIsDoorOpen()
+        {
+            //TODO
+        }
+
+
     }
 }
