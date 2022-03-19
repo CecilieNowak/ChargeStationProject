@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace ChargeStationProject.Test
@@ -56,6 +57,14 @@ namespace ChargeStationProject.Test
 
             _uut.DoorClose();
             Assert.That(_receivedEventArgs.DoorIsOpen, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void DoorLocked_DoorLcokIsCalled_ConsoleOutput()
+        {
+
+            _uut.LockDoor();
+            Assert.That();
         }
     }
 }

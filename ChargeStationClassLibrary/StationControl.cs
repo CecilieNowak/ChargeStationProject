@@ -10,7 +10,7 @@ namespace ChargeStationProject
     public class StationControl
     {
         // Enum med tilstande ("states") svarende til tilstandsdiagrammet for klassen
-        private enum LadeskabState
+        public enum LadeskabState
         {
             Available,
             Locked,
@@ -26,7 +26,6 @@ namespace ChargeStationProject
         private int _oldId;
         private IDoor _door;
         private IDisplay _display; // CBE tilføjet
-        public bool DoorIsOpen { get; private set; } //TODO slettes?
 
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
@@ -95,6 +94,10 @@ namespace ChargeStationProject
             }
         }
 
+        public LadeskabState GetLadeskabState()
+        {
+            return _state;
+        }
         // Her mangler de andre trigger handlere
         private void HandleOnOpenDoorEvent(object? sender, DoorStateEventArgs e)
         {
@@ -110,7 +113,7 @@ namespace ChargeStationProject
                     Console.WriteLine("(Handling) Døren er nu åben");
                     Console.WriteLine("Tilslut telefon");
 
-                    DoorIsOpen = e.DoorIsOpen; // TODO skal slettes?
+                    
                     _state = LadeskabState.DoorOpen;
 
                     break;
@@ -127,7 +130,7 @@ namespace ChargeStationProject
                         Console.WriteLine("(Handling) Døren er nu lukket");
                         Console.WriteLine("Indlæs telefon");
 
-                        DoorIsOpen = e.DoorIsOpen; //TODO skal slettes?
+                       
                     }
 
                     break;
@@ -140,7 +143,7 @@ namespace ChargeStationProject
                         writer.WriteLine(DateTime.Now + ": Ladeskabet er optaget!");
                     }
 
-                    DoorIsOpen = e.DoorIsOpen; //TODO skal slettes?
+                   
 
                     break;
 
