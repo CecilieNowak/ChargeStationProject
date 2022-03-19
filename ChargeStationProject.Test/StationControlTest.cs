@@ -11,14 +11,16 @@ namespace ChargeStationProject.Test
         private StationControl _uut;
         private IDoor _door;
         private IChargeControl _chargeControl;
+        private IDisplay _display;
 
         [SetUp]
         public void Setup()
         {
             _door = Substitute.For<IDoor>();
             _chargeControl = Substitute.For<IChargeControl>();
+            _display = Substitute.For<IDisplay>();
 
-            _uut = new StationControl(_door, _chargeControl);
+            _uut = new StationControl(_door, _display, _chargeControl);
 
         }
 

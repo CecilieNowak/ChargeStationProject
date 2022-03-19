@@ -18,7 +18,7 @@ namespace ChargeStationProject
 
         };
 
-        
+
 
         // Her mangler flere member variable
         private LadeskabState _state;
@@ -31,7 +31,7 @@ namespace ChargeStationProject
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
         // Her mangler constructor
-        public StationControl(IDoor door,IDisplay display, IChargeControl chargeControl)
+        public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl)
         {
             _door = door;
             _door.OpenDoorEvent += HandleOnOpenDoorEvent;
@@ -101,7 +101,7 @@ namespace ChargeStationProject
             switch (_state)
             {
                 case LadeskabState.Available:
-              
+
                     using (var writer = File.AppendText(logFile))
                     {
                         writer.WriteLine(DateTime.Now + ": Døren er åben");
@@ -111,7 +111,7 @@ namespace ChargeStationProject
                     Console.WriteLine("Tilslut telefon");
 
                     DoorIsOpen = e.DoorIsOpen; // TODO skal slettes?
-                    _state= LadeskabState.DoorOpen;
+                    _state = LadeskabState.DoorOpen;
 
                     break;
 
@@ -129,7 +129,7 @@ namespace ChargeStationProject
 
                         DoorIsOpen = e.DoorIsOpen; //TODO skal slettes?
                     }
-                   
+
                     break;
 
                 case LadeskabState.Locked:
@@ -145,18 +145,20 @@ namespace ChargeStationProject
                     break;
 
 
-        }
+            }
 
-        public void DoorOpened()
-        {
-            _display.showMessage("Tilslut telefon");
+
         }
-        public void DoorClosed()
-        {
-            _display.showMessage("Indlæs RFID");
-        }
-        // her skal koden til station messages ligge
+            public void DoorOpened()
+            {
+                _display.showMessage("Tilslut telefon");
+            }
+
+            public void DoorClosed()
+            {
+                _display.showMessage("Indlæs RFID");
+            }
+            // her skal koden til station messages ligge
 
     }
-
 }
