@@ -104,17 +104,19 @@ namespace ChargeStationProject
             switch (_state)
             {
                 case LadeskabState.Available:
-
-                    using (var writer = File.AppendText(logFile))
+                    if (e.DoorIsOpen == true)
                     {
-                        writer.WriteLine(DateTime.Now + ": Døren er åben");
+                        using (var writer = File.AppendText(logFile))
+                        {
+                            writer.WriteLine(DateTime.Now + ": Døren er åben");
+                        }
+
+                        Console.WriteLine("(Handling) Døren er nu åben");
+                        Console.WriteLine("Tilslut telefon");
+
+
+                        _state = LadeskabState.DoorOpen;
                     }
-
-                    Console.WriteLine("(Handling) Døren er nu åben");
-                    Console.WriteLine("Tilslut telefon");
-
-                    
-                    _state = LadeskabState.DoorOpen;
 
                     break;
 
@@ -130,7 +132,7 @@ namespace ChargeStationProject
                         Console.WriteLine("(Handling) Døren er nu lukket");
                         Console.WriteLine("Indlæs telefon");
 
-                       
+                        _state = LadeskabState.Available;
                     }
 
                     break;

@@ -25,41 +25,29 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
-        public void DoorOpened_DoorIsOpenedEvent_DoorIsOpenIsTrue()
+        public void DoorOpened_DoorIsOpenedEvent_LadeSkabStateIsDoorOpen()
         {
-
+            
             _door.OpenDoorEvent += Raise.EventWith(new DoorStateEventArgs { DoorIsOpen = true }); //Her sendes et fake event
-            Assert.That(_uut.DoorIsOpen, Is.True); //TODO hvordan skal man ellers gøre?
-
-        }
-
-        public void DoorOpened_DoorIsOpenedEvent_DoorIsOpenIsNotTrue()
-        {
-
-            _door.OpenDoorEvent += Raise.EventWith(new DoorStateEventArgs { DoorIsOpen = false }); //Her sendes et fake event
-            Assert.That(_uut.DoorIsOpen, Is.Not.True); //TODO hvordan skal man ellers gøre?
+            Assert.That(_uut.GetLadeskabState(), Is.EqualTo(StationControl.LadeskabState.DoorOpen)); 
 
         }
 
         [Test]
-        public void DoorClosed_DoorIsOpenedEvent_DoorIsOpenIsFalse()
+        public void DoorClosed_DoorIsOpenedEvent_LadeskabStateIsDoorOpened()
         {
 
             _door.OpenDoorEvent += Raise.EventWith(new DoorStateEventArgs { DoorIsOpen = false }); //Her sendes et fake event
-
-            Assert.That(_uut.DoorIsOpen, Is.False);
+            Assert.That(_uut.GetLadeskabState(), Is.EqualTo(StationControl.LadeskabState.Available));
 
         }
-
 
         [Test]
-        public void DoorClosed_DoorIsOpenedEvent_DoorIsOpenIsNotFalse()
+        public void DoorLocked_DoorIsOpenedEvent_LadeskabStateIsDoorLocked()
         {
-
-            _door.OpenDoorEvent += Raise.EventWith(new DoorStateEventArgs { DoorIsOpen = true }); //Her sendes et fake event
-
-            Assert.That(_uut.DoorIsOpen, Is.Not.False);
-
+            
         }
+
+    
     }
 }
