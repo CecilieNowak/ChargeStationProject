@@ -8,8 +8,9 @@ namespace ChargeStationProject
     {
         public bool isConnected();
         public void stopCharge();
-        public void startChange();
+        public void startCharge();
 
 
     }
+   
 }

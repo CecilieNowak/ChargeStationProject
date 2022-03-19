@@ -1,24 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UsbSimulator;
 
 namespace ChargeStationProject
 {
-    class ChargeControl : IChargeControl
+    public class ChargeControl : IChargeControl
     {
+        public IUsbCharger _UsbCharger;
+
+        public ChargeControl()
+        {
+            _UsbCharger = new UsbChargerSimulator();
+        }
+        
         public bool isConnected()
         {
-            throw new NotImplementedException();
+            if (_UsbCharger.Connected == true)
+                return true;
+            else
+                return false;
         }
 
         public void stopCharge()
         {
-            throw new NotImplementedException();
+           _UsbCharger.StopCharge();
         }
 
-        public void startChange()
+        public void startCharge()
         {
-            throw new NotImplementedException();
+            _UsbCharger.StartCharge();
         }
     }
+
+   
 }

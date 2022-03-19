@@ -1,11 +1,18 @@
 ﻿    using System;
+    using System.Security.Cryptography.X509Certificates;
+    using ChargeStationProject;
+
 
     class Program
     {
+        
         static void Main(string[] args)
         {
-				// Assemble your system here from all the classes
 
+            var door = new Door();
+            var charger = new ChargeControl();
+            var stationControl = new StationControl(door, charger);
+            var arg = new DoorStateEventArgs(); //TODO hvor skal dette instantieres?
 
             bool finish = false;
             do
@@ -22,11 +29,11 @@
                         break;
 
                     case 'O':
-                        door.OnDoorOpen();
+                        door.DoorOpen();
                         break;
 
                     case 'C':
-                        door.OnDoorClose();
+                       door.DoorClose();
                         break;
 
                     case 'R':
@@ -34,7 +41,7 @@
                         string idString = System.Console.ReadLine();
 
                         int id = Convert.ToInt32(idString);
-                       rfidReader.OnRfidRead(id);
+                      // rfidReader.OnRfidRead(id);
                         break;
 
                     default:

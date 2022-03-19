@@ -6,14 +6,22 @@ namespace ChargeStationProject
 {
     public interface IDoor
     {
-        public event EventHandler<DoorIsOpen> DoorIsOpenEvent;
+        event EventHandler<DoorStateEventArgs> OpenDoorEvent;
+        
+
         public void DoorOpen();
         public void DoorClose();
+        public void LockDoor();
+        public void UnlockDoor();
+
+    }
+
+    public class DoorStateEventArgs : EventArgs
+    {
+        public bool DoorIsOpen { get; set; }
         
     }
 
-    public class DoorIsOpen : EventArgs
-    {
-        public bool DoorOpenArgs { get; set; }
-    }
+
+    
 }

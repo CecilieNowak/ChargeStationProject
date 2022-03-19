@@ -15,36 +15,41 @@ namespace ChargeStationProject
             Available,
             Locked,
             DoorOpen
+
         };
+
+        
 
         // Her mangler flere member variable
         private LadeskabState _state;
         private IChargeControl _charger;
         private int _oldId;
         private IDoor _door;
-
-        public bool doorIsOpen { get; set; }
+        public bool DoorIsOpen { get; private set; } //TODO slettes?
 
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
-        // Her mangler constructor
-        public StationControl(IDoor door)
+        // Udkast til constructor
+        public StationControl(IDoor door, IChargeControl chargeControl)
         {
-            door.DoorIsOpenEvent += HandleOnDoorIsOpenEvent;
+            _door = door;
+            _door.OpenDoorEvent += HandleOnOpenDoorEvent;
+          
         }
 
-        
+
+
         // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
         private void RfidDetected(int id)
         {
             switch (_state)
             {
                 case LadeskabState.Available:
-                  // Check for ladeforbindelse
-                    if (_charger.Connected)
-                  {
+                    // Check for ladeforbindelse
+                    if (_charger.isConnected() == true) //TODO Property? .connected == true
+                    {
                         _door.LockDoor();
-                        _charger.StartCharge(); 
+                        _charger.startCharge();
                         _oldId = id;
                         using (var writer = File.AppendText(logFile))
                         {
@@ -53,14 +58,14 @@ namespace ChargeStationProject
 
                         Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
                         _state = LadeskabState.Locked;
-                  } 
+                    }
 
-                  else 
-                  { 
-                      Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen."); 
-                  } 
+                    else
+                    {
+                        Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
+                    }
 
-                  break;
+                    break;
 
                 case LadeskabState.DoorOpen:
                     // Ignore
@@ -70,8 +75,8 @@ namespace ChargeStationProject
                     // Check for correct ID
                     if (id == _oldId)
                     {
-                        _charger.StopCharge(); 
-                        _door.UnlockDoor(); 
+                        _charger.stopCharge();
+                        _door.UnlockDoor();
                         using (var writer = File.AppendText(logFile))
                         {
                             writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
@@ -90,11 +95,58 @@ namespace ChargeStationProject
         }
 
         // Her mangler de andre trigger handlere
-        private void HandleOnDoorIsOpenEvent(object? sender, DoorIsOpen e)
+        private void HandleOnOpenDoorEvent(object? sender, DoorStateEventArgs e)
         {
-            doorIsOpen = e.DoorOpenArgs;
+            switch (_state)
+            {
+                case LadeskabState.Available:
+              
+                    using (var writer = File.AppendText(logFile))
+                    {
+                        writer.WriteLine(DateTime.Now + ": Døren er åben");
+                    }
 
+                    Console.WriteLine("(Handling) Døren er nu åben");
+                    Console.WriteLine("Tilslut telefon");
+
+                    DoorIsOpen = e.DoorIsOpen; // TODO skal slettes?
+                    _state= LadeskabState.DoorOpen;
+
+                    break;
+
+
+                case LadeskabState.DoorOpen:
+                    if (e.DoorIsOpen == false)
+                    {
+                        using (var writer = File.AppendText(logFile))
+                        {
+                            writer.WriteLine(DateTime.Now + ": Døren er lukket");
+                        }
+
+                        Console.WriteLine("(Handling) Døren er nu lukket");
+                        Console.WriteLine("Indlæs telefon");
+
+                        DoorIsOpen = e.DoorIsOpen; //TODO skal slettes?
+                    }
+                   
+                    break;
+
+                case LadeskabState.Locked:
+                    Console.WriteLine("Ladeskabet er optaget!");
+
+                    using (var writer = File.AppendText(logFile))
+                    {
+                        writer.WriteLine(DateTime.Now + ": Ladeskabet er optaget!");
+                    }
+
+                    DoorIsOpen = e.DoorIsOpen; //TODO skal slettes?
+
+                    break;
+
+
+            }
         }
-
+       
     }
+
 }
