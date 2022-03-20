@@ -27,6 +27,15 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
+        public void Door_NewlyCreatedObject_IsLockedIsfalse()
+        {
+            //arrange in setUp
+            //act not needed, because the test is based on zero inputs and zero actions
+            //Assert
+            Assert.That(_uut.IsLocked, Is.False);
+        }
+
+        [Test]
         public void DoorOpen_DoorOpenedIsCalled_EventFired()
         {
 
@@ -60,11 +69,21 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
-        public void DoorLocked_DoorLcokIsCalled_ConsoleOutput()
+        public void DoorLocked_LockDoorIsCalled_IsLockedIsTrue()
         {
 
             _uut.LockDoor();
-           // Assert.That();
+
+            Assert.That(_uut.IsLocked, Is.True);
+        }
+
+        [Test]
+        public void DoorUnlocked_UnlockDoorIsCalled_IsLockedIsFalse()
+        {
+
+            _uut.UnlockDoor();
+
+            Assert.That(_uut.IsLocked, Is.False);
         }
     }
 }

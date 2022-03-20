@@ -32,6 +32,8 @@ namespace ChargeStationProject
         // Her mangler constructor
         public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl)
         {
+          _state = LadeskabState.Available;
+
             _door = door;
             _charger = chargeControl;
             _door.OpenDoorEvent += HandleOnOpenDoorEvent;
@@ -99,6 +101,13 @@ namespace ChargeStationProject
         {
             return _state;
         }
+
+
+        public void SetLadeskabState(LadeskabState s)
+        { 
+            _state = s;
+        }
+
         // Her mangler de andre trigger handlere
         private void HandleOnOpenDoorEvent(object? sender, DoorStateEventArgs e)
         {
@@ -107,13 +116,14 @@ namespace ChargeStationProject
                 case LadeskabState.Available:
                     if (e.DoorIsOpen == true)
                     {
+
                         using (var writer = File.AppendText(logFile))
                         {
                             writer.WriteLine(DateTime.Now + ": Døren er åben");
                         }
 
                         Console.WriteLine("(Handling) Døren er nu åben");
-                        Console.WriteLine("Tilslut telefon");
+                        Console.WriteLine("Tilslut telefon"); //TODO display instructions
 
 
                         _state = LadeskabState.DoorOpen;
@@ -131,7 +141,7 @@ namespace ChargeStationProject
                         }
 
                         Console.WriteLine("(Handling) Døren er nu lukket");
-                        Console.WriteLine("Indlæs telefon");
+                        //TODO Display instructions
 
                         _state = LadeskabState.Available;
                     }
@@ -145,8 +155,6 @@ namespace ChargeStationProject
                     {
                         writer.WriteLine(DateTime.Now + ": Ladeskabet er optaget!");
                     }
-
-                   
 
                     break;
 

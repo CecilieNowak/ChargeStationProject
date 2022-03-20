@@ -7,7 +7,12 @@ namespace ChargeStationProject
     public class Door : IDoor
     {
         public event EventHandler<DoorStateEventArgs> OpenDoorEvent;
-      
+        public bool IsLocked { get; set; }
+
+        public Door()
+        {
+            IsLocked = false;
+        }
 
 
         protected virtual void OnOpenDoor(DoorStateEventArgs e) 
@@ -16,8 +21,6 @@ namespace ChargeStationProject
         }
 
       
-
-
 
         public void DoorOpen() // der er en med same navn i kontrol klassen
         {
@@ -40,11 +43,14 @@ namespace ChargeStationProject
         public void LockDoor()
         {
            Console.WriteLine("(Handling) Døren er låst");
+           IsLocked = true;
+
         }
 
         public void UnlockDoor()
         {
            Console.WriteLine("Døren er låst op");
+           IsLocked = false;
         }
     }
 }

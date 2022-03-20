@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChargeStationProject
 {
-    class DisplayInstructions : IDisplay
+   public class DisplayInstructions : IDisplay
     {
         public void showMessage(string message)
         {

@@ -12,9 +12,9 @@
         {
 
             IDoor door = new Door();
-            IUsbCharger charger = new UsbChargerSimulator(); 
-            var chargeControl = new ChargeControl(charger);
-            //var stationControl = new StationControl(door, charger); //TODO uncomment
+            IChargeControl charger = new ChargeControl(new UsbChargerSimulator());
+            IDisplay display = new DisplayInstructions();
+            var stationControl = new StationControl(door, display, charger); //TODO uncomment
             var arg = new DoorStateEventArgs(); //TODO hvor skal dette instantieres?
 
             bool finish = false;

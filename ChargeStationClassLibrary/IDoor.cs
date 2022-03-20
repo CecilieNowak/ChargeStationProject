@@ -7,7 +7,7 @@ namespace ChargeStationProject
     public interface IDoor
     {
         event EventHandler<DoorStateEventArgs> OpenDoorEvent;
-        
+        public bool IsLocked { get; set; }
 
         public void DoorOpen();
         public void DoorClose();
