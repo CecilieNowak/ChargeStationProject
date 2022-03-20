@@ -22,10 +22,10 @@ namespace ChargeStationProject
         private IChargeControl _charger;
         private int _oldId;
         private IDoor _door;
+        private ILogFile logFile;
 
         public bool doorIsOpen { get; set; }
 
-        private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
         // Her mangler constructor
         public StationControl(IDoor door)
@@ -34,7 +34,7 @@ namespace ChargeStationProject
         }
 
         
-        // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
+        // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen. 
         private void RfidDetected(int id)
         {
             switch (_state)
@@ -46,10 +46,8 @@ namespace ChargeStationProject
                         _door.LockDoor();
                         _charger.StartCharge(); 
                         _oldId = id;
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
-                        }
+
+                        logFile.LogDoorLocked(id);
 
                         Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
                         _state = LadeskabState.Locked;
@@ -72,10 +70,8 @@ namespace ChargeStationProject
                     {
                         _charger.StopCharge(); 
                         _door.UnlockDoor(); 
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
-                        }
+
+                        logFile.LogDoorUnlocked(id);
 
                         Console.WriteLine("Tag din telefon ud af skabet og luk døren");
                         _state = LadeskabState.Available;
