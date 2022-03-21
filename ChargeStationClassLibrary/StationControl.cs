@@ -43,7 +43,7 @@ namespace ChargeStationProject
             _door.OpenDoorEvent += HandleOnOpenDoorEvent;
             _display = display; //CBE tilføjet
         }
-    // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
+    // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for   klassen
         private void RfidDetected(int id)
         {
             switch (_state)
