@@ -10,12 +10,15 @@ namespace ChargeStationProject
     public class StationControl
     {
         // Enum med tilstande ("states") svarende til tilstandsdiagrammet for klassen
-        private enum LadeskabState
+        public enum LadeskabState
         {
             Available,
             Locked,
             DoorOpen
+
         };
+
+
 
         // Her mangler flere member variable
         private LadeskabState _state;
@@ -23,42 +26,47 @@ namespace ChargeStationProject
         private int _oldId;
         private IDoor _door;
         private ILogFile logFile;
+        private IDisplay _display; // CBE tilføjet
 
         public bool doorIsOpen { get; set; }
 
+        private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
         // Her mangler constructor
-        public StationControl(IDoor door)
+        public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl)
         {
-            door.DoorIsOpenEvent += HandleOnDoorIsOpenEvent;
-        }
+          _state = LadeskabState.Available;
 
-        
-        // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen. 
+            _door = door;
+            _charger = chargeControl;
+            _door.OpenDoorEvent += HandleOnOpenDoorEvent;
+            _display = display; //CBE tilføjet
+        }
+    // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
         private void RfidDetected(int id)
         {
             switch (_state)
             {
                 case LadeskabState.Available:
-                  // Check for ladeforbindelse
-                    if (_charger.Connected)
-                  {
+                    // Check for ladeforbindelse
+                    if (_charger.Connected == true) //TODO Property? .connected == true
+                    {
                         _door.LockDoor();
-                        _charger.StartCharge(); 
+                        _charger.startCharge();
                         _oldId = id;
 
                         logFile.LogDoorLocked(id);
 
                         Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
                         _state = LadeskabState.Locked;
-                  } 
+                    }
 
-                  else 
-                  { 
-                      Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen."); 
-                  } 
+                    else
+                    {
+                        Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
+                    }
 
-                  break;
+                    break;
 
                 case LadeskabState.DoorOpen:
                     // Ignore
@@ -67,11 +75,17 @@ namespace ChargeStationProject
                 case LadeskabState.Locked:
                     // Check for correct ID
                     if (id == _oldId)
-                    {
+                        _charger.stopCharge();
+                        _door.UnlockDoor();
+                        using (var writer = File.AppendText(logFile))
+                        {
+                            writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
+                        }
                         _charger.StopCharge(); 
                         _door.UnlockDoor(); 
 
                         logFile.LogDoorUnlocked(id);
+                        }
 
                         Console.WriteLine("Tag din telefon ud af skabet og luk døren");
                         _state = LadeskabState.Available;
@@ -85,12 +99,82 @@ namespace ChargeStationProject
             }
         }
 
-        // Her mangler de andre trigger handlere
-        private void HandleOnDoorIsOpenEvent(object? sender, DoorIsOpen e)
+        public LadeskabState GetLadeskabState()
         {
-            doorIsOpen = e.DoorOpenArgs;
+            return _state;
+        }
+
+
+        public void SetLadeskabState(LadeskabState s)
+        { 
+            _state = s;
+        }
+
+        // Her mangler de andre trigger handlere
+        private void HandleOnOpenDoorEvent(object? sender, DoorStateEventArgs e)
+        {
+            switch (_state)
+            {
+                case LadeskabState.Available:
+                    if (e.DoorIsOpen == true)
+                    {
+
+                        using (var writer = File.AppendText(logFile))
+                        {
+                            writer.WriteLine(DateTime.Now + ": Døren er åben");
+                        }
+
+                        Console.WriteLine("(Handling) Døren er nu åben");
+                        Console.WriteLine("Tilslut telefon"); //TODO display instructions
+
+
+                        _state = LadeskabState.DoorOpen;
+                    }
+
+                    break;
+
+
+                case LadeskabState.DoorOpen:
+                    if (e.DoorIsOpen == false)
+                    {
+                        using (var writer = File.AppendText(logFile))
+                        {
+                            writer.WriteLine(DateTime.Now + ": Døren er lukket");
+                        }
+
+                        Console.WriteLine("(Handling) Døren er nu lukket");
+                        //TODO Display instructions
+
+                        _state = LadeskabState.Available;
+                    }
+
+                    break;
+
+                case LadeskabState.Locked:
+                    Console.WriteLine("Ladeskabet er optaget!");
+
+                    using (var writer = File.AppendText(logFile))
+                    {
+                        writer.WriteLine(DateTime.Now + ": Ladeskabet er optaget!");
+                    }
+
+                    break;
+
+
+            }
+
 
         }
+            public void DoorOpened()
+            {
+                _display.showMessage("Tilslut telefon");
+            }
+
+            public void DoorClosed()
+            {
+                _display.showMessage("Indlæs RFID");
+            }
+            // her skal koden til station messages ligge
 
     }
 }

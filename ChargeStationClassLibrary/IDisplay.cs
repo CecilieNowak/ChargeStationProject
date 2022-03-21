@@ -6,9 +6,7 @@ namespace ChargeStationProject
 {
     public interface IDisplay
     {
-        public void ShowDisplay()
-        {
-            Console.WriteLine(); 
-        }
+        public void showMessage(string message);
+
     }
 }

@@ -6,10 +6,12 @@ namespace ChargeStationProject
 {
     public interface IChargeControl
     {
-        public bool IsConnected();
-        public void StopCharge();
-        public void StartChange();
-
+        public bool Connected { get; set; }
+        public bool IsCompleted { get; set; }
+        public void stopCharge();
+        public void startCharge();
+   
 
     }
+   
 }

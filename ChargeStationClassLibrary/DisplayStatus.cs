@@ -4,11 +4,12 @@ using System.Text;
 
 namespace ChargeStationProject
 {
-    class DisplayStatus : IDisplay
+    public class DisplayStatus : IDisplay
     {
-        public void ShowMessage()
+        public void showMessage(string message)
         {
-            Console.WriteLine();
+            System.Console.WriteLine(message);
+
         }
     }
 }
