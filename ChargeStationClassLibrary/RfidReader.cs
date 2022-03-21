@@ -6,6 +6,21 @@ namespace ChargeStationProject
 {
     class RfidReader : IRfidReader
     {
-        public event EventHandler<RfidDetectedEventArgs> RfidDetectedEvent;
+        private const int _correctRfid = 12345678;
+        private bool _validRfid = false;
+        public bool ValidateRFIDEntryRequest(int RFID)
+        {
+            _validRfid = false; 
+
+            Console.WriteLine("UserValidation::ValidateRFIDEntryRequest called");
+            if (RFID == _correctRfid)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

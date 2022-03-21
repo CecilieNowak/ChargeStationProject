@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChargeStationClassLibrary;
 
 namespace ChargeStationProject
 {
-    public class StationControl
+    public class StationControl : IStationControl
     {
         // Enum med tilstande ("states") svarende til tilstandsdiagrammet for klassen
         public enum LadeskabState
@@ -57,14 +58,13 @@ namespace ChargeStationProject
 
                         logFile.LogDoorLocked(id);
 
-                        Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
+                        _display.showMessage("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."); //tilføjet CBE
                         _state = LadeskabState.Locked;
                     }
-
-                    else
-                    {
-                        Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
-                    }
+                    else 
+                    { 
+                      _display.showMessage("Din telefon er ikke ordentlig tilsluttet. Prøv igen."); //tilføjet CBE
+                    } 
 
                     break;
 
@@ -74,7 +74,8 @@ namespace ChargeStationProject
 
                 case LadeskabState.Locked:
                     // Check for correct ID
-                    if (id == _oldId)
+                    if (CheckId(_oldId,id)) // hvem skal lave den her?
+                    {
                         _charger.stopCharge();
                         _door.UnlockDoor();
                         using (var writer = File.AppendText(logFile))
@@ -87,12 +88,12 @@ namespace ChargeStationProject
                         logFile.LogDoorUnlocked(id);
                         }
 
-                        Console.WriteLine("Tag din telefon ud af skabet og luk døren");
+                        _display.showMessage("Tag din telefon ud af skabet og luk døren"); //tilføjet CBE
                         _state = LadeskabState.Available;
                     }
                     else
                     {
-                        Console.WriteLine("Forkert RFID tag");
+                        _display.showMessage("Forkert RFID tag"); //tilføjet CBE
                     }
 
                     break;
@@ -125,7 +126,8 @@ namespace ChargeStationProject
                         }
 
                         Console.WriteLine("(Handling) Døren er nu åben");
-                        Console.WriteLine("Tilslut telefon"); //TODO display instructions
+                        
+                        _display.showMessage("Tilslut telefon"); //TODO display instructions
 
 
                         _state = LadeskabState.DoorOpen;
@@ -143,6 +145,7 @@ namespace ChargeStationProject
                         }
 
                         Console.WriteLine("(Handling) Døren er nu lukket");
+                        _display.showMessage("Indlæs RFID");
                         //TODO Display instructions
 
                         _state = LadeskabState.Available;
@@ -159,22 +162,18 @@ namespace ChargeStationProject
                     }
 
                     break;
-
-
             }
-
 
         }
-            public void DoorOpened()
-            {
-                _display.showMessage("Tilslut telefon");
-            }
 
-            public void DoorClosed()
-            {
-                _display.showMessage("Indlæs RFID");
-            }
-            // her skal koden til station messages ligge
+      public bool CheckId(int oldId, int id) // //tilføjet CBE
+      {
+            if (oldId == id)
+                return true;
+
+            return false;
+      }
+        
 
     }
 }

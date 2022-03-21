@@ -13,6 +13,8 @@ namespace ChargeStationProject
     //Interface
     public interface IRfidReader
     {
-        public event EventHandler<RfidDetectedEventArgs> RfidDetectedEvent;
+
+        bool ValidateRFIDEntryRequest(int RFID);
     }
 }
+

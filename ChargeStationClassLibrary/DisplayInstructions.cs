@@ -6,13 +6,13 @@ namespace ChargeStationProject
 {
    public class DisplayInstructions : IDisplay
     {
+        public string SaveMessage { get; set; }
         public void showMessage(string message)
         {
+            SaveMessage = message;  // for at kunne test klassen er der oprettet dette, da jeg ikke kan teste om den udskrive det
             System.Console.WriteLine(message);
         }
 
-        // metoden skal skifte i mellem few forskellige udskrift 
-        // PhoneConnected, RFID, Error, Occupied og Remove
-        //jeg tænker at anvende if eller case
+        
     }
 }
