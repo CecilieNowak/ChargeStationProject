@@ -20,7 +20,8 @@ namespace ChargeStationProject.Test
             public void Setup()
             {
                 _charger = Substitute.For<IUsbCharger>();
-                _uut = new ChargeControl(_charger, _display);
+                _display = Substitute.For<IDisplay>();
+                _uut = new ChargeControl(_charger,_display);
             }
 
         [Test]
