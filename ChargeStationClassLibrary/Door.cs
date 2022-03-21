@@ -12,16 +12,20 @@ namespace ChargeStationProject
         public Door()
         {
             IsLocked = false;
+            //Ark instantieres her
+
         }
 
 
         protected virtual void OnOpenDoor(DoorStateEventArgs e) 
         {
+            //invoke
+
         }
 
       
 
-        public void DoorOpen() // der er en med same navn i kontrol klassen
+        public void DoorOpen() 
         {
             OnOpenDoor(new DoorStateEventArgs()
             {

@@ -44,63 +44,66 @@ namespace ChargeStationProject
             _display = display; //CBE tilføjet
         }
     // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
-        private void RfidDetected(int id)
+    private void RfidDetected(int id)
+    {
+        switch (_state)
         {
-            switch (_state)
-            {
-                case LadeskabState.Available:
-                    // Check for ladeforbindelse
-                    if (_charger.Connected == true) //TODO Property? .connected == true
+            case LadeskabState.Available:
+                // Check for ladeforbindelse
+                if (_charger.Connected == true) //TODO Property? .connected == true
+                {
+                    _door.LockDoor();
+                    _charger.startCharge();
+                    _oldId = id;
+
+                    logFile.LogDoorLocked(id);
+
+                    _display.showMessage(
+                        "Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."); //tilføjet CBE
+                    _state = LadeskabState.Locked;
+                }
+                else
+                {
+                    _display.showMessage("Din telefon er ikke ordentlig tilsluttet. Prøv igen."); //tilføjet CBE
+                }
+
+                break;
+
+            case LadeskabState.DoorOpen:
+                // Ignore
+                break;
+
+            case LadeskabState.Locked:
+                // Check for correct ID
+                if (CheckId(_oldId, id)) // hvem skal lave den her?
+                {
+                    _charger.stopCharge();
+                    _door.UnlockDoor();
+                    using (var writer = File.AppendText(logFile))
                     {
-                        _door.LockDoor();
-                        _charger.startCharge();
-                        _oldId = id;
-
-                        logFile.LogDoorLocked(id);
-
-                        _display.showMessage("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."); //tilføjet CBE
-                        _state = LadeskabState.Locked;
-                    }
-                    else 
-                    { 
-                      _display.showMessage("Din telefon er ikke ordentlig tilsluttet. Prøv igen."); //tilføjet CBE
-                    } 
-
-                    break;
-
-                case LadeskabState.DoorOpen:
-                    // Ignore
-                    break;
-
-                case LadeskabState.Locked:
-                    // Check for correct ID
-                    if (CheckId(_oldId,id)) // hvem skal lave den her?
-                    {
-                        _charger.stopCharge();
-                        _door.UnlockDoor();
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
-                        }
-                        _charger.StopCharge(); 
-                        _door.UnlockDoor(); 
-
-                        logFile.LogDoorUnlocked(id);
-                        }
-
-                        _display.showMessage("Tag din telefon ud af skabet og luk døren"); //tilføjet CBE
-                        _state = LadeskabState.Available;
-                    }
-                    else
-                    {
-                        _display.showMessage("Forkert RFID tag"); //tilføjet CBE
+                        writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
                     }
 
-                    break;
-            }
+                    _charger.stopCharge();
+                    _door.UnlockDoor();
+
+                    logFile.LogDoorUnlocked(id);
+
+
+                    _display.showMessage("Tag din telefon ud af skabet og luk døren"); //tilføjet CBE
+                    _state = LadeskabState.Available;
+                }
+                else
+                {
+                    _display.showMessage("Forkert RFID tag"); //tilføjet CBE
+                }
+
+                break;
         }
 
-        public LadeskabState GetLadeskabState()
+    }
+
+    public LadeskabState GetLadeskabState()
         {
             return _state;
         }
