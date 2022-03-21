@@ -75,7 +75,7 @@ namespace ChargeStationProject
 
                 case LadeskabState.Locked:
                     // Check for correct ID
-                    if (CheckId(_oldId,id)) //
+                    if (CheckId(_oldId,id)) // hvem skal lave den her?
                     {
                         _charger.stopCharge();
                         _door.UnlockDoor();
@@ -156,9 +156,9 @@ namespace ChargeStationProject
                     }
 
                     break;
-
-
             }
+
+        }
 
         public void DoorOpened()
         {
