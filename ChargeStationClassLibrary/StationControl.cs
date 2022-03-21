@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChargeStationClassLibrary;
 
 namespace ChargeStationProject
 {
-    public class StationControl
+    public class StationControl : IStationControl
     {
         // Enum med tilstande ("states") svarende til tilstandsdiagrammet for klassen
         public enum LadeskabState
