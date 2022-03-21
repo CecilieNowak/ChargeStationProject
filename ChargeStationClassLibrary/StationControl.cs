@@ -123,7 +123,8 @@ namespace ChargeStationProject
                         }
 
                         Console.WriteLine("(Handling) Døren er nu åben");
-                        Console.WriteLine("Tilslut telefon"); //TODO display instructions
+                        
+                        _display.showMessage("Tilslut telefon"); //TODO display instructions
 
 
                         _state = LadeskabState.DoorOpen;
@@ -141,6 +142,7 @@ namespace ChargeStationProject
                         }
 
                         Console.WriteLine("(Handling) Døren er nu lukket");
+                        _display.showMessage("Indlæs RFID");
                         //TODO Display instructions
 
                         _state = LadeskabState.Available;
@@ -161,22 +163,13 @@ namespace ChargeStationProject
 
         }
 
-        public void DoorOpened()
-        {
-            _display.showMessage("Tilslut telefon"); //tilføjet CBE
-        }
-        public void DoorClosed()
-        {
-            _display.showMessage("Indlæs RFID"); //tilføjet CBE
-        }
-
-        public bool CheckId(int oldId, int id) // //tilføjet CBE
-        {
+      public bool CheckId(int oldId, int id) // //tilføjet CBE
+      {
             if (oldId == id)
                 return true;
 
             return false;
-        }
+      }
         
 
     }
