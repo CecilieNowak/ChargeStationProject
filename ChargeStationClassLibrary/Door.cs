@@ -17,7 +17,6 @@ namespace ChargeStationProject
 
         protected virtual void OnOpenDoor(DoorStateEventArgs e) 
         {
-            OpenDoorEvent?.Invoke(this, e);
         }
 
       
