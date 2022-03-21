@@ -6,5 +6,8 @@ namespace ChargeStationProject
 {
     public interface IRfidReader
     {
+
+        bool ValidateRFIDEntryRequest(int RFID);
     }
 }
+
