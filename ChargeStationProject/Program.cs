@@ -12,8 +12,8 @@
         {
 
             IDoor door = new Door();
-            IChargeControl charger = new ChargeControl(new UsbChargerSimulator());
-            IDisplay display = new DisplayInstructions();
+            IDisplay display = new DisplayInstructions(); //Kan ændres!
+            IChargeControl charger = new ChargeControl(new UsbChargerSimulator(),display);
             var stationControl = new StationControl(door, display, charger); //TODO uncomment
             var arg = new DoorStateEventArgs(); //TODO hvor skal dette instantieres?
 
