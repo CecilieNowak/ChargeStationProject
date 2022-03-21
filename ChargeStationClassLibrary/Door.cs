@@ -6,31 +6,51 @@ namespace ChargeStationProject
 {
     public class Door : IDoor
     {
-        public event EventHandler<DoorIsOpen> DoorIsOpenEvent;
-      
-        
-        protected virtual void OnDoorOpen(DoorIsOpen e)
+        public event EventHandler<DoorStateEventArgs> OpenDoorEvent;
+        public bool IsLocked { get; set; }
+
+        public Door()
         {
-            DoorIsOpenEvent?.Invoke(this, e);
+            IsLocked = false;
         }
 
 
+        protected virtual void OnOpenDoor(DoorStateEventArgs e) 
+        {
+            OpenDoorEvent?.Invoke(this, e);
+        }
+
+      
 
         public void DoorOpen() // der er en med same navn i kontrol klassen
         {
-            
-            OnDoorOpen(new DoorIsOpen()
+            OnOpenDoor(new DoorStateEventArgs()
             {
-                //hvad skal der ske
-                // DoorOpenArgs sættes til true
+                DoorIsOpen = true
             });
-            
-            throw new NotImplementedException();
+
+    
         }
 
         public void DoorClose()
         {
-            throw new NotImplementedException();
+            OnOpenDoor(new DoorStateEventArgs()
+            {
+                DoorIsOpen = false
+            });
+        }
+
+        public void LockDoor()
+        {
+           Console.WriteLine("(Handling) Døren er låst");
+           IsLocked = true;
+
+        }
+
+        public void UnlockDoor()
+        {
+           Console.WriteLine("Døren er låst op");
+           IsLocked = false;
         }
     }
 }

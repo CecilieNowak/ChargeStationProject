@@ -7,6 +7,7 @@ namespace ChargeStationProject.Test
         [SetUp]
         public void Setup()
         {
+
         }
 
         [Test]
