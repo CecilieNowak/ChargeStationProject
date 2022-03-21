@@ -13,14 +13,14 @@ namespace ChargeStationProject.Test
     class TestChargeControl
     {
         private IUsbCharger _charger;
-        //private IDisplay _display;
+        private IDisplay _display;
         private IChargeControl _uut;
 
             [SetUp]
             public void Setup()
             {
                 _charger = Substitute.For<IUsbCharger>();
-                _uut = new ChargeControl(_charger);
+                _uut = new ChargeControl(_charger, _display);
             }
 
         [Test]
