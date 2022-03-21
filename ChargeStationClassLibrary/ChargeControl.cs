@@ -13,12 +13,13 @@ namespace ChargeStationProject
         public bool Connected { get; set; }
         public bool IsCompleted { get; set; }
 
-        public ChargeControl(IUsbCharger usbCharger)
+        public ChargeControl(IUsbCharger usbCharger, IDisplay display)
         {
             _UsbCharger = usbCharger;
             IsCompleted = false;
             Connected = false; //TODO skal sættes til true et sted?
             _UsbCharger.CurrentValueEvent += OnCurrentValueEvent;
+            _display = display; //CBE tilføjet
         }
 
 
