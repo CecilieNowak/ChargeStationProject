@@ -1,11 +1,21 @@
 ﻿    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Security.Cryptography.X509Certificates;
+    using ChargeStationProject;
+    using UsbSimulator;
+
 
     class Program
     {
+        
         static void Main(string[] args)
         {
-				// Assemble your system here from all the classes
 
+            IDoor door = new Door();
+            IChargeControl charger = new ChargeControl(new UsbChargerSimulator());
+            IDisplay display = new DisplayInstructions();
+            var stationControl = new StationControl(door, display, charger); //TODO uncomment
+            var arg = new DoorStateEventArgs(); //TODO hvor skal dette instantieres?
 
             bool finish = false;
             do
@@ -22,11 +32,11 @@
                         break;
 
                     case 'O':
-                        door.OnDoorOpen();
+                        door.DoorOpen();
                         break;
 
                     case 'C':
-                        door.OnDoorClose();
+                       door.DoorClose();
                         break;
 
                     case 'R':
@@ -34,7 +44,7 @@
                         string idString = System.Console.ReadLine();
 
                         int id = Convert.ToInt32(idString);
-                       rfidReader.OnRfidRead(id);
+                      // rfidReader.OnRfidRead(id);
                         break;
 
                     default:
