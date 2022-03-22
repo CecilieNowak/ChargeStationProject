@@ -27,6 +27,7 @@ namespace ChargeStationProject
         private int _oldId;
         private IDoor _door;
         private IDisplay _display; // CBE tilføjet
+        private RfidReader _rfid;
 
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
@@ -39,23 +40,29 @@ namespace ChargeStationProject
             _charger = chargeControl;
             _door.OpenDoorEvent += HandleOnOpenDoorEvent;
             _display = display; //CBE tilføjet
+            _rfid = new RfidReader();
+
         }
 
 
 
         // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
-        private void RfidDetected(int id)
+        public void RfidDetected(int id)
         {
             switch (_state)
             {
                 case LadeskabState.Available:
                     // Check for ladeforbindelse
-                    if (_charger.Connected == true) //TODO Property? .connected == true
+                    if (_charger.Connected == true) 
                     {
                         _door.LockDoor();
                         _charger.startCharge();
-                        _oldId = id;
-                        using (var writer = File.AppendText(logFile))
+                     //   _oldId = id; //TODO CSN skal dette slettes?
+
+                     _rfid.ValidateRfidEntryRequest(id);
+
+
+                     using (var writer = File.AppendText(logFile))
                         {
                             writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
                         }
@@ -76,7 +83,7 @@ namespace ChargeStationProject
 
                 case LadeskabState.Locked:
                     // Check for correct ID
-                    if (CheckId(_oldId,id)) // hvem skal lave den her?
+                    if (_rfid.ValidateRfidEntryRequest(id)==true) // hvem skal lave den her?
                     {
                         _charger.stopCharge();
                         _door.UnlockDoor();
@@ -163,13 +170,14 @@ namespace ChargeStationProject
 
         }
 
-      public bool CheckId(int oldId, int id) // //tilføjet CBE
+     /* public bool CheckId(int oldId, int id) // //tilføjet CBE
       {
             if (oldId == id)
                 return true;
 
             return false;
       }
+     */ //TODO skal måske slettes?
         
 
     }
