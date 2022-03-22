@@ -4,13 +4,13 @@ namespace ChargeStationProject.Test
 {
     public class Tests
     {
-        private IDisplay _display;
-        private IDisplay _displayS;
+        private FakeDisplayInstructions _display;
+        private FakeDisplayStatus _displayS;
         [SetUp]
         public void Setup()
         {
-            _display = new DisplayInstructions();
-            _displayS = new DisplayStatus();
+            _display = new FakeDisplayInstructions();
+            _displayS = new FakeDisplayStatus();
         }
 
         [Test]
