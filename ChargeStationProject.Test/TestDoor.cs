@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
+using UsbSimulator;
 
 namespace ChargeStationProject.Test
 {
@@ -18,7 +20,7 @@ namespace ChargeStationProject.Test
         {
             _receivedEventArgs = null;
             _uut = new Door();
-            _uut.OpenDoorEvent +=
+           _uut.OpenDoorEvent +=
                 (o, args) =>
                 {
                     _receivedEventArgs = args;
@@ -49,18 +51,14 @@ namespace ChargeStationProject.Test
         {
 
             //arrange
-
-           
-
             _uut.OpenDoorEvent -=
                 (o, args) =>
                 {
                     _receivedEventArgs = args;
                 };
 
-            _receivedEventArgs = null;
-
-            Assert.That(_receivedEventArgs, Is.Null);
+            
+            Assert.That(()=>_uut.DoorOpen(), Throws.Nothing);
         }
 
         [Test]
