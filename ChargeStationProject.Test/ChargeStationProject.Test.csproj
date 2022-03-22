@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChargeStationProject\ChargeStationProject.csproj" />
+    <ProjectReference Include="..\ChargeStationClassLibrary\ChargeStationClassLibrary.csproj" />
   </ItemGroup>
 
 </Project>

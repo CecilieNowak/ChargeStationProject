@@ -18,7 +18,7 @@ namespace ChargeStationProject
 
     public class DoorStateEventArgs : EventArgs
     {
-        public bool DoorIsOpen { get; set; }
+        public bool DoorIsOpen { get; set; }    
         
     }
 

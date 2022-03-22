@@ -12,16 +12,19 @@ namespace ChargeStationProject
         public Door()
         {
             IsLocked = false;
+
         }
 
 
-        protected virtual void OnOpenDoor(DoorStateEventArgs e) 
+        protected virtual void OnOpenDoor(DoorStateEventArgs e)
         {
+            OpenDoorEvent?.Invoke(this, e);
+
         }
 
       
 
-        public void DoorOpen() // der er en med same navn i kontrol klassen
+        public void DoorOpen() 
         {
             OnOpenDoor(new DoorStateEventArgs()
             {

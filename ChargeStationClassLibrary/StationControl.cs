@@ -26,8 +26,11 @@ namespace ChargeStationProject
         private IChargeControl _charger;
         private int _oldId;
         private IDoor _door;
+       // private ILogFile logFile; //TODO uncomment
         private IDisplay _display; // CBE tilføjet
         private RfidReader _rfid;
+
+        public bool doorIsOpen { get; set; }
 
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
@@ -67,19 +70,22 @@ namespace ChargeStationProject
                             writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
                         }
 
-                        _display.showMessage("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."); //tilføjet CBE
-                        _state = LadeskabState.Locked;
-                    }
-                    else 
-                    { 
-                      _display.showMessage("Din telefon er ikke ordentlig tilsluttet. Prøv igen."); //tilføjet CBE
-                    } 
+              //      logFile.LogDoorLocked(id);
 
-                    break;
+                    _display.showMessage(
+                        "Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."); //tilføjet CBE
+                    _state = LadeskabState.Locked;
+                }
+                else
+                {
+                    _display.showMessage("Din telefon er ikke ordentlig tilsluttet. Prøv igen."); //tilføjet CBE
+                }
 
-                case LadeskabState.DoorOpen:
-                    // Ignore
-                    break;
+                break;
+
+            case LadeskabState.DoorOpen:
+                // Ignore
+                break;
 
                 case LadeskabState.Locked:
                     // Check for correct ID
@@ -92,19 +98,26 @@ namespace ChargeStationProject
                             writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
                         }
 
-                        _display.showMessage("Tag din telefon ud af skabet og luk døren"); //tilføjet CBE
-                        _state = LadeskabState.Available;
-                    }
-                    else
-                    {
-                        _display.showMessage("Forkert RFID tag"); //tilføjet CBE
-                    }
+                    _charger.stopCharge();
+                    _door.UnlockDoor();
 
-                    break;
-            }
+             //       logFile.LogDoorUnlocked(id);
+
+
+                    _display.showMessage("Tag din telefon ud af skabet og luk døren"); //tilføjet CBE
+                    _state = LadeskabState.Available;
+                }
+                else
+                {
+                    _display.showMessage("Forkert RFID tag"); //tilføjet CBE
+                }
+
+                break;
         }
 
-        public LadeskabState GetLadeskabState()
+    }
+
+    public LadeskabState GetLadeskabState()
         {
             return _state;
         }
@@ -116,7 +129,7 @@ namespace ChargeStationProject
         }
 
         // Her mangler de andre trigger handlere
-        private void HandleOnOpenDoorEvent(object? sender, DoorStateEventArgs e)
+        private void HandleOnOpenDoorEvent(object sender, DoorStateEventArgs e)
         {
             switch (_state)
             {
