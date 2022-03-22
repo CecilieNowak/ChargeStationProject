@@ -48,15 +48,19 @@ namespace ChargeStationProject.Test
         public void DoorOpen_NoMethodIsCalled_EventIsNull()
         {
 
-            
+            //arrange
+            _uut.OpenDoorEvent -=
+                (o, args) =>
+                {
+                    _receivedEventArgs = args;
+                };
+
             Assert.That(_receivedEventArgs, Is.Null);
         }
 
         [Test]
         public void DoorOpen_DoorOpenedIsCalled_CorrectBoolReceived()
         {
-
-            _uut.DoorOpen();
             Assert.That(_receivedEventArgs.DoorIsOpen, Is.EqualTo(true));
         }
 
