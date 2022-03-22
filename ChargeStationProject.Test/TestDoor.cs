@@ -10,7 +10,7 @@ namespace ChargeStationProject.Test
 
     class TestDoor
     {
-        private IDoor _uut;
+        private Door _uut;
         private DoorStateEventArgs _receivedEventArgs;
 
         [SetUp]
@@ -45,15 +45,20 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
-        public void DoorOpen_NoMethodIsCalled_EventIsNull()
+        public void EventUnsubscribed_NoMethodIsCalled_EventIsNull()
         {
 
             //arrange
-            _uut.OpenDoorEvent -=
+
+           
+
+            _uut.OpenDoorEvent +=
                 (o, args) =>
                 {
                     _receivedEventArgs = args;
                 };
+
+            _receivedEventArgs = null;
 
             Assert.That(_receivedEventArgs, Is.Null);
         }
