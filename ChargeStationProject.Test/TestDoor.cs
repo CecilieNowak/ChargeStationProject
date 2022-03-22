@@ -45,6 +45,14 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
+        public void DoorOpen_NoMethodIsCalled_EventIsNull()
+        {
+
+            
+            Assert.That(_receivedEventArgs, Is.Null);
+        }
+
+        [Test]
         public void DoorOpen_DoorOpenedIsCalled_CorrectBoolReceived()
         {
 

@@ -60,7 +60,7 @@ namespace ChargeStationProject
                     {
                         _door.LockDoor();
                         _charger.startCharge();
-                     //   _oldId = id; //TODO CSN skal dette slettes?
+                     
 
                      _rfid.ValidateRfidEntryRequest(id);
 
@@ -144,7 +144,7 @@ namespace ChargeStationProject
 
                         Console.WriteLine("(Handling) Døren er nu åben");
                         
-                        _display.showMessage("Tilslut telefon"); //TODO display instructions
+                        _display.showMessage("Tilslut telefon");
 
 
                         _state = LadeskabState.DoorOpen;
@@ -163,7 +163,6 @@ namespace ChargeStationProject
 
                         Console.WriteLine("(Handling) Døren er nu lukket");
                         _display.showMessage("Indlæs RFID");
-                        //TODO Display instructions
 
                         _state = LadeskabState.Available;
                     }
@@ -183,15 +182,6 @@ namespace ChargeStationProject
 
         }
 
-     /* public bool CheckId(int oldId, int id) // //tilføjet CBE
-      {
-            if (oldId == id)
-                return true;
-
-            return false;
-      }
-     */ //TODO skal måske slettes?
-        
 
     }
 }
