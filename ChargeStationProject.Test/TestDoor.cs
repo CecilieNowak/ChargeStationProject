@@ -61,6 +61,7 @@ namespace ChargeStationProject.Test
         [Test]
         public void DoorOpen_DoorOpenedIsCalled_CorrectBoolReceived()
         {
+            _uut.DoorOpen();
             Assert.That(_receivedEventArgs.DoorIsOpen, Is.EqualTo(true));
         }
 
