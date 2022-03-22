@@ -4,11 +4,13 @@ using System.Text;
 
 namespace ChargeStationProject.Test
 {
-    class FakeUserValidation : IRfidReader
-    {
+
+    //TODO uncomment
+    //class FakeUserValidation : IRfidReader
+   // {
        
-        {
-            private int _correctRfid = "1234";
+     //   {
+    /*        private int _correctRfid = "1234";
 
             private bool _validRfid = false;
 
@@ -34,5 +36,6 @@ namespace ChargeStationProject.Test
                 return _validRfid;
             }
         }
-    }
+    }*/
 }
+    

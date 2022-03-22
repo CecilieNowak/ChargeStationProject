@@ -26,7 +26,7 @@ namespace ChargeStationProject
         private IChargeControl _charger;
         private int _oldId;
         private IDoor _door;
-        private ILogFile logFile;
+       // private ILogFile logFile; //TODO uncomment
         private IDisplay _display; // CBE tilføjet
 
         public bool doorIsOpen { get; set; }
@@ -56,7 +56,7 @@ namespace ChargeStationProject
                     _charger.startCharge();
                     _oldId = id;
 
-                    logFile.LogDoorLocked(id);
+              //      logFile.LogDoorLocked(id);
 
                     _display.showMessage(
                         "Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."); //tilføjet CBE
@@ -87,7 +87,7 @@ namespace ChargeStationProject
                     _charger.stopCharge();
                     _door.UnlockDoor();
 
-                    logFile.LogDoorUnlocked(id);
+             //       logFile.LogDoorUnlocked(id);
 
 
                     _display.showMessage("Tag din telefon ud af skabet og luk døren"); //tilføjet CBE
@@ -115,7 +115,7 @@ namespace ChargeStationProject
         }
 
         // Her mangler de andre trigger handlere
-        private void HandleOnOpenDoorEvent(object? sender, DoorStateEventArgs e)
+        private void HandleOnOpenDoorEvent(object sender, DoorStateEventArgs e)
         {
             switch (_state)
             {

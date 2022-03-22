@@ -12,14 +12,13 @@ namespace ChargeStationProject
         public Door()
         {
             IsLocked = false;
-            //Ark instantieres her
 
         }
 
 
-        protected virtual void OnOpenDoor(DoorStateEventArgs e) 
+        protected virtual void OnOpenDoor(DoorStateEventArgs e)
         {
-            //invoke
+            OpenDoorEvent?.Invoke(this, e);
 
         }
 
