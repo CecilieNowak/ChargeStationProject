@@ -52,7 +52,7 @@ namespace ChargeStationProject.Test
 
            
 
-            _uut.OpenDoorEvent +=
+            _uut.OpenDoorEvent -=
                 (o, args) =>
                 {
                     _receivedEventArgs = args;
