@@ -56,10 +56,10 @@ namespace ChargeStationProject.Test
                 {
                     _receivedEventArgs = args;
                 };
-            _receivedEventArgs = null;
             
             Assert.That(()=>_uut.DoorOpen(), Throws.Nothing);
         }
+
 
         [Test]
         public void DoorOpen_DoorOpenedIsCalled_CorrectBoolReceived()

@@ -146,6 +146,7 @@ namespace ChargeStationProject
                         
                         _display.showMessage("Tilslut telefon");
 
+                        _charger.Connected = true;
 
                         _state = LadeskabState.DoorOpen;
                     }
