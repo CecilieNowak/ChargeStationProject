@@ -6,14 +6,14 @@ namespace ChargeStationProject
 {
     class RfidReader : IRfidReader
     {
-        private const int _correctRfid = 12345678;
+        private int _correctRfid = 12345678;
         private bool _validRfid = false;
-        public bool ValidateRFIDEntryRequest(int RFID)
+        public bool ValidateRfidEntryRequest(int rfid)
         {
             _validRfid = false; 
 
-            Console.WriteLine("UserValidation::ValidateRFIDEntryRequest called");
-            if (RFID == _correctRfid)
+            Console.WriteLine("RFIDValidation::ValidateRFIDEntryRequest called");
+            if (rfid == _correctRfid)
             {
                 return true;
             }

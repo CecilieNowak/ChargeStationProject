@@ -40,6 +40,7 @@ namespace ChargeStationProject.Test
         {
 
             _uut.DoorOpen();
+            //-= sætter eventet til null
             Assert.That(_receivedEventArgs, Is.Not.Null);
         }
 

@@ -6,7 +6,8 @@ namespace ChargeStationProject
 {
     public interface ILogFile
     {
-        public void logDoorLocked(int id);
-        public void logDoorUnlocked(int id);
+        public void LogDoorLocked(int id) {}
+
+        public void LogDoorUnlocked(int id) {}
     }
 }
