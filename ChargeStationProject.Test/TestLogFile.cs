@@ -16,6 +16,7 @@ namespace ChargeStationProject.Test
             _uut = new FakeLogFile();
         }
 
+
         [Test]
         public void LogDoorLocked_NotCalledYet_WrittenToFileCountIsZero()
         {
