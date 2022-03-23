@@ -39,7 +39,7 @@ namespace ChargeStationProject
             }
             
         }
-        private void OnCurrentValueEvent(object? sender, CurrentEventArgs e)
+        private void OnCurrentValueEvent(object sender, CurrentEventArgs e)
         {
                 if (e.Current == 0)
                 {
