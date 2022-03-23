@@ -25,6 +25,7 @@ namespace ChargeStationProject
         private int _oldId;
         private IDoor _door;
         private IDisplay _display; // CBE tilføjet
+        private RfidReader _rfid;
 
 
         private ILogFile logFile;
@@ -43,20 +44,30 @@ namespace ChargeStationProject
             logFile = new LogFile();
         }
 
-    // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
-    private void RfidDetected(int id)
-    {
-        switch (_state)
-        {
-            case LadeskabState.Available:
-                // Check for ladeforbindelse
-                if (_charger.Connected == true) //TODO Property? .connected == true
-                {
-                    _door.LockDoor();
-                    _charger.startCharge();
-                    _oldId = id;
 
-                    logFile.LogDoorLocked(id);
+
+        // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
+        public void RfidDetected(int id)
+        {
+            switch (_state)
+            {
+                case LadeskabState.Available:
+                    // Check for ladeforbindelse
+                    if (_charger.Connected == true) 
+                    {
+                        _door.LockDoor();
+                        _charger.startCharge();
+                     
+
+                     _rfid.ValidateRfidEntryRequest(id);
+
+
+                     using (var writer = File.AppendText(logFile))
+                        {
+                            writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
+                        }
+
+              //      logFile.LogDoorLocked(id);
 
                     _display.showMessage(
                         "Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."); //tilføjet CBE
@@ -73,13 +84,21 @@ namespace ChargeStationProject
                 // Ignore
                 break;
 
-            case LadeskabState.Locked:
-                // Check for correct ID
-                if (CheckId(_oldId, id)) // hvem skal lave den her?
-                {
+                case LadeskabState.Locked:
+                    // Check for correct ID
+                    if (_rfid.ValidateRfidEntryRequest(id)==true) // hvem skal lave den her?
+                    {
+                        _charger.stopCharge();
+                        _door.UnlockDoor();
+                        using (var writer = File.AppendText(logFile))
+                        {
+                            writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
+                        }
+
                     _charger.stopCharge();
                     _door.UnlockDoor();
-                    logFile.LogDoorUnlocked(id);
+
+             //       logFile.LogDoorUnlocked(id);
 
 
                     _display.showMessage("Tag din telefon ud af skabet og luk døren"); //tilføjet CBE
@@ -116,8 +135,9 @@ namespace ChargeStationProject
 
                         Console.WriteLine("(Handling) Døren er nu åben");
                         
-                        _display.showMessage("Tilslut telefon"); //TODO display instructions
+                        _display.showMessage("Tilslut telefon");
 
+                        _charger.Connected = true;
 
                         _state = LadeskabState.DoorOpen;
                     }
@@ -131,7 +151,6 @@ namespace ChargeStationProject
 
                         Console.WriteLine("(Handling) Døren er nu lukket");
                         _display.showMessage("Indlæs RFID");
-                        //TODO Display instructions
 
                         _state = LadeskabState.Available;
                     }
@@ -146,14 +165,6 @@ namespace ChargeStationProject
 
         }
 
-      public bool CheckId(int oldId, int id) // //tilføjet CBE
-      {
-            if (oldId == id)
-                return true;
-
-            return false;
-      }
-        
 
     }
 }
