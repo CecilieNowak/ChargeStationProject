@@ -39,7 +39,7 @@ namespace ChargeStationProject
             }
             
         }
-        private void OnCurrentValueEvent(object? sender, CurrentEventArgs e)
+        private void OnCurrentValueEvent(object sender, CurrentEventArgs e)
         {
                 if (e.Current == 0)
                 {
@@ -58,7 +58,7 @@ namespace ChargeStationProject
                     IsCompleted = false;
                     _display.showMessage("telefonen oplader"); //tilføjet af CBE
                     //TODO Display viser at ladning foregår
-            }
+                }
 
                 else if (e.Current > 500)
                 {
@@ -66,7 +66,7 @@ namespace ChargeStationProject
                     _UsbCharger.StopCharge();
                     _display.showMessage("fejl i opladning"); //tilføjet af CBE
                     //TODO Display viser at fejlmeddelse 
-            }
+                }
                 else
                 {
                     throw new ArgumentOutOfRangeException();

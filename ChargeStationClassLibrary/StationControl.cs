@@ -19,19 +19,16 @@ namespace ChargeStationProject
 
         };
 
-
-
         // Her mangler flere member variable
         private LadeskabState _state;
         private IChargeControl _charger;
         private int _oldId;
         private IDoor _door;
-        private ILogFile logFile;
         private IDisplay _display; // CBE tilføjet
 
-        public bool doorIsOpen { get; set; }
 
-        private string logFile = "logfile.txt"; // Navnet på systemets log-fil
+        private ILogFile logFile;
+       //private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
         // Her mangler constructor
         public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl)
@@ -42,7 +39,10 @@ namespace ChargeStationProject
             _charger = chargeControl;
             _door.OpenDoorEvent += HandleOnOpenDoorEvent;
             _display = display; //CBE tilføjet
+
+            logFile = new LogFile();
         }
+
     // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
     private void RfidDetected(int id)
     {
@@ -79,14 +79,6 @@ namespace ChargeStationProject
                 {
                     _charger.stopCharge();
                     _door.UnlockDoor();
-                    using (var writer = File.AppendText(logFile))
-                    {
-                        writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
-                    }
-
-                    _charger.stopCharge();
-                    _door.UnlockDoor();
-
                     logFile.LogDoorUnlocked(id);
 
 
@@ -100,7 +92,6 @@ namespace ChargeStationProject
 
                 break;
         }
-
     }
 
     public LadeskabState GetLadeskabState()
@@ -115,18 +106,13 @@ namespace ChargeStationProject
         }
 
         // Her mangler de andre trigger handlere
-        private void HandleOnOpenDoorEvent(object? sender, DoorStateEventArgs e)
+        private void HandleOnOpenDoorEvent(object sender, DoorStateEventArgs e)
         {
             switch (_state)
             {
                 case LadeskabState.Available:
                     if (e.DoorIsOpen == true)
                     {
-
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Døren er åben");
-                        }
 
                         Console.WriteLine("(Handling) Døren er nu åben");
                         
@@ -142,10 +128,6 @@ namespace ChargeStationProject
                 case LadeskabState.DoorOpen:
                     if (e.DoorIsOpen == false)
                     {
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Døren er lukket");
-                        }
 
                         Console.WriteLine("(Handling) Døren er nu lukket");
                         _display.showMessage("Indlæs RFID");
@@ -158,11 +140,6 @@ namespace ChargeStationProject
 
                 case LadeskabState.Locked:
                     Console.WriteLine("Ladeskabet er optaget!");
-
-                    using (var writer = File.AppendText(logFile))
-                    {
-                        writer.WriteLine(DateTime.Now + ": Ladeskabet er optaget!");
-                    }
 
                     break;
             }

@@ -1,33 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using ChargeStationProject;
 
-namespace ChargeStationProject
+namespace ChargeStationClassLibrary
 {
     public class LogFile : ILogFile
     {
-        private StreamWriter writer;
-        private string logFile = "logfile.txt"; // Navnet på systemets log-fil
+        private string _logFile = "logfile.txt"; // Navnet på systemets log-fil
 
-        //event ?
+        public LogFile()
+        { }
 
-        //Logging når skab er låst
         public void LogDoorLocked(int id)
         {
-            using (writer = File.AppendText(logFile))
+            StreamWriter writer;
+
+            using (writer = File.AppendText(_logFile))
             {
                 writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
             }
+            writer.Close();
+
         }
 
-        //Logging når skab er låst op
         public void LogDoorUnlocked(int id)
         {
-            using (writer = File.AppendText(logFile))
+            StreamWriter writer;
+
+            using (writer = File.AppendText(_logFile))
             {
                 writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
             }
+            writer.Close();
+
         }
     }
 }
