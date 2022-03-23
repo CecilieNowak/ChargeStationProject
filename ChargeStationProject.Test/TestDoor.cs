@@ -38,6 +38,13 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
+        public void test()
+        {
+            _uut = new Door();
+            Assert.That(()=> _uut.DoorOpen(), Throws.Nothing);
+        }     
+
+        [Test]
         public void DoorOpen_DoorOpenedIsCalled_EventFired()
         {
 
