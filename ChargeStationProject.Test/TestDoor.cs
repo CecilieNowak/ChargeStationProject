@@ -102,5 +102,7 @@ namespace ChargeStationProject.Test
 
             Assert.That(_uut.IsLocked, Is.False);
         }
+
+       
     }
 }
