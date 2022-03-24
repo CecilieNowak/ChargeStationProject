@@ -24,6 +24,8 @@ namespace ChargeStationProject.Test
 
         }
 
+
+
         [Test]
         public void StationControl_NewlyCreatedObject_LadeSkabStateIsAvailable()
         {
@@ -113,6 +115,7 @@ namespace ChargeStationProject.Test
 
         }
 
+   
 
 
     }

@@ -21,7 +21,7 @@ namespace ChargeStationProject
 
         // Her mangler flere member variable
         private LadeskabState _state;
-        private IChargeControl _charger;
+        private IChargeControl _chargeControl;
         private int _oldId;
         private IDoor _door;
         private IDisplay _display; // CBE tilføjet
@@ -37,7 +37,7 @@ namespace ChargeStationProject
           _state = LadeskabState.Available;
 
             _door = door;
-            _charger = chargeControl;
+            _chargeControl = chargeControl;
             _door.OpenDoorEvent += HandleOnOpenDoorEvent;
             _display = display; //CBE tilføjet
 
@@ -53,10 +53,10 @@ namespace ChargeStationProject
             {
                 case LadeskabState.Available:
                     // Check for ladeforbindelse
-                    if (_charger.Connected == true) 
+                    if (_chargeControl.Connected == true) 
                     {
                         _door.LockDoor();
-                        _charger.startCharge();
+                        _chargeControl.startCharge();
                      
 
                      _rfid.ValidateRfidEntryRequest(id);
@@ -82,7 +82,7 @@ namespace ChargeStationProject
                     // Check for correct ID
                     if (_rfid.ValidateRfidEntryRequest(id) == true) // hvem skal lave den her?
                     {
-                        _charger.stopCharge();
+                        _chargeControl.stopCharge();
                         _door.UnlockDoor();
 
                         logFile.LogDoorUnlocked(id);
@@ -124,7 +124,7 @@ namespace ChargeStationProject
                         
                         _display.showMessage("Tilslut telefon");
 
-                        _charger.Connected = true;
+                        _chargeControl.Connected = true;
 
                         _state = LadeskabState.DoorOpen;
                     }
