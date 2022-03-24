@@ -6,7 +6,7 @@ namespace ChargeStationClassLibrary
 {
     public class LogFile : ILogFile
     {
-        private string _logFile = "logfile.txt"; // Navnet på systemets log-fil
+        private string _logFile = "logfile.txt"; 
 
         public LogFile()
         { }
@@ -17,9 +17,9 @@ namespace ChargeStationClassLibrary
 
             using (writer = File.AppendText(_logFile))
             {
-                writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
+                writer.WriteLine(DateTime.Today + ": Skab låst med RFID: {0}", id);
+                writer.Close();
             }
-            writer.Close();
 
         }
 
@@ -29,9 +29,9 @@ namespace ChargeStationClassLibrary
 
             using (writer = File.AppendText(_logFile))
             {
-                writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
+                writer.WriteLine(DateTime.Today + ": Skab låst op med RFID: {0}", id);
+                writer.Close();
             }
-            writer.Close();
 
         }
     }

@@ -46,7 +46,7 @@ namespace ChargeStationProject.Test
                 _uut.stopCharge();
 
                 //assert
-                _charger.Received(1).StopCharge();
+                _charger.Received(1).StopCharge(); 
 
             }
 

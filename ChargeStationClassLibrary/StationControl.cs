@@ -25,14 +25,11 @@ namespace ChargeStationProject
         private int _oldId;
         private IDoor _door;
         private IDisplay _display; // CBE tilføjet
-        private RfidReader _rfid;
-
-
-        private ILogFile logFile;
-       //private string logFile = "logfile.txt"; // Navnet på systemets log-fil
-
+        private IRfidReader _rfid;
+        private ILogFile _logFile;
+      
         // Her mangler constructor
-        public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl)
+        public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl, ILogFile logFile, IRfidReader rfidReader)
         {
           _state = LadeskabState.Available;
 
@@ -40,8 +37,9 @@ namespace ChargeStationProject
             _chargeControl = chargeControl;
             _door.OpenDoorEvent += HandleOnOpenDoorEvent;
             _display = display; //CBE tilføjet
+            _logFile = logFile;
+            _rfid = rfidReader; 
 
-            logFile = new LogFile();
         }
 
 
@@ -61,7 +59,7 @@ namespace ChargeStationProject
 
                      _rfid.ValidateRfidEntryRequest(id);
 
-                     logFile.LogDoorLocked(id);
+                     _logFile.LogDoorLocked(id);
 
                     _display.showMessage(
                         "Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."); //tilføjet CBE
@@ -85,7 +83,7 @@ namespace ChargeStationProject
                         _chargeControl.stopCharge();
                         _door.UnlockDoor();
 
-                        logFile.LogDoorUnlocked(id);
+                        _logFile.LogDoorUnlocked(id);
 
 
                         _display.showMessage("Tag din telefon ud af skabet og luk døren"); //tilføjet CBE
