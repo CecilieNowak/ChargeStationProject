@@ -17,7 +17,7 @@ namespace ChargeStationProject
         {
             _UsbCharger = usbCharger;
             IsCompleted = false;
-            Connected = false; //TODO skal sættes til true et sted?
+            Connected = false; 
             _UsbCharger.CurrentValueEvent += OnCurrentValueEvent;
             _display = display; //CBE tilføjet
         }

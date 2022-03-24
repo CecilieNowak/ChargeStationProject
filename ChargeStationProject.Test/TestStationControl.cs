@@ -28,6 +28,8 @@ namespace ChargeStationProject.Test
             _uut = new StationControl(_door, _display, _chargeControl, _logFile, _rfidReader);
         }
 
+
+
         [Test]
         public void StationControl_NewlyCreatedObject_LadeSkabStateIsAvailable()
         {

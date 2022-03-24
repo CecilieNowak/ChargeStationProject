@@ -20,11 +20,8 @@ namespace ChargeStationProject.Test
         {
             _receivedEventArgs = null;
             _uut = new Door();
-           _uut.OpenDoorEvent +=
-                (o, args) =>
-                {
-                    _receivedEventArgs = args;
-                };
+            _uut.OpenDoorEvent +=
+                (o, args) => { _receivedEventArgs = args; };
 
         }
 
@@ -38,7 +35,7 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
-        public void test()
+        public void DoorOpen_DoorOpenCalledWithNoSubscribtion_ThrowsNothing()
         {
             _uut = new Door();
             Assert.That(()=> _uut.DoorOpen(), Throws.Nothing);
