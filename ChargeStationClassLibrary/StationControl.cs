@@ -19,7 +19,6 @@ namespace ChargeStationProject
 
         };
 
-        // Her mangler flere member variable
         private LadeskabState _state;
         private IChargeControl _chargeControl;
         private int _oldId;
@@ -78,7 +77,7 @@ namespace ChargeStationProject
 
                 case LadeskabState.Locked:
                     // Check for correct ID
-                    if (_rfid.ValidateRfidEntryRequest(id) == true) // hvem skal lave den her?
+                    if (_rfid.ValidateRfidEntryRequest(id) == true)
                     {
                         _chargeControl.stopCharge();
                         _door.UnlockDoor();
