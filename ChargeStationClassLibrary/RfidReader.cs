@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChargeStationProject
 {
-    class RfidReader : IRfidReader
+    public class RfidReader : IRfidReader
     {
         private int _correctRfid = 12345678;
         private bool _validRfid = false;

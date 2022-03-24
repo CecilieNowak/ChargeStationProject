@@ -16,7 +16,8 @@
            IDisplay display = new DisplayInstructions();
            IChargeControl charger = new ChargeControl(new UsbChargerSimulator(),display);
            ILogFile logFile = new LogFile();
-            var stationControl = new StationControl(door, display, charger, logFile); 
+           IRfidReader rfidReader = new RfidReader();
+            var stationControl = new StationControl(door, display, charger, logFile, rfidReader); 
             var arg = new DoorStateEventArgs(); //TODO hvor skal dette instantieres?
 
 
