@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using NSubstitute;
 using NUnit.Framework;
@@ -12,6 +13,8 @@ namespace ChargeStationProject.Test
         private IDoor _door;
         private IChargeControl _chargeControl;
         private IDisplay _display;
+        private ILogFile _logFile;
+        private IRfidReader _rfidReader; 
 
         [SetUp]
         public void Setup()
@@ -19,9 +22,10 @@ namespace ChargeStationProject.Test
             _door = Substitute.For<IDoor>();
             _chargeControl = Substitute.For<IChargeControl>();
             _display = Substitute.For<IDisplay>();
+            _logFile = Substitute.For<ILogFile>();
+            _rfidReader = Substitute.For<IRfidReader>();
 
-            _uut = new StationControl(_door, _display, _chargeControl);
-
+            _uut = new StationControl(_door, _display, _chargeControl, _logFile, _rfidReader);
         }
 
         [Test]
@@ -113,7 +117,53 @@ namespace ChargeStationProject.Test
 
         }
 
+        [Test]
+        public void LadeskabStateIsAvailable_LogFileIsCalled_DoorLockedIsWrittenToFile()
+        {
+            //arrange
+            _uut.SetLadeskabState(StationControl.LadeskabState.Available);
+            _chargeControl.Connected = true;
 
+            //act
+            _uut.RfidDetected(12345678);
 
+            //assert
+            _logFile.Received(1).LogDoorLocked(12345678);
+        }
+
+        [Test]
+        public void LadeskabStateIsLocked_LogFileIsCalled_DoorUnlockedIsWrittenToFile()
+        {
+            //arrange
+            _uut.SetLadeskabState(StationControl.LadeskabState.Locked);
+            _rfidReader.ValidateRfidEntryRequest(12345678);
+
+            //act
+            _uut.RfidDetected(12345678);
+
+            //assert
+            _logFile.Received(1).LogDoorUnlocked(12345678);
+        }
+
+        [Test]
+        public void LadeskabStateIsAvailable_LogFileIsCalledTwice_DoorStateIsWrittenToFileTwice()
+        {
+            //arrange
+            File.Delete(@"logFile.txt");
+            _uut.SetLadeskabState(StationControl.LadeskabState.Available);
+            _chargeControl.Connected = true;
+
+            //act
+            _uut.RfidDetected(12345678);
+
+            //arrange
+            _uut.SetLadeskabState(StationControl.LadeskabState.Available);
+
+            //act
+            _uut.RfidDetected(12345678);
+
+            //assert
+            _logFile.Received(2).LogDoorLocked(12345678);
+        }
     }
 }
