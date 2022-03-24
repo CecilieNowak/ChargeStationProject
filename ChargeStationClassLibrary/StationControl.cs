@@ -60,7 +60,7 @@ namespace ChargeStationProject
                     {
                         _door.LockDoor();
                         _charger.startCharge();
-                     //   _oldId = id; //TODO CSN skal dette slettes?
+                     
 
                      _rfid.ValidateRfidEntryRequest(id);
 
