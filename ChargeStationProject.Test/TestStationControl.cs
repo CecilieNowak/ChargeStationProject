@@ -195,5 +195,15 @@ namespace ChargeStationProject.Test
             //assert
             _logFile.Received(2).LogDoorLocked(12345678);
         }
+        [Test]
+        public void RequestEntry_validRFID_DoorOpens()
+        {
+            _uut.SetLadeskabState(StationControl.LadeskabState.Locked);
+            _rfidReader.ValidateRfidEntryRequest(12345678);
+
+            _uut.RfidDetected(12345678);
+
+            _door.Received(1).UnlockDoor();
+        }
     }
 }
