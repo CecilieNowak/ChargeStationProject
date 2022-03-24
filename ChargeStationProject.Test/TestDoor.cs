@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
+using UsbSimulator;
 
 namespace ChargeStationProject.Test
 {
@@ -10,7 +12,7 @@ namespace ChargeStationProject.Test
 
     class TestDoor
     {
-        private IDoor _uut;
+        private Door _uut;
         private DoorStateEventArgs _receivedEventArgs;
 
         [SetUp]
@@ -18,7 +20,7 @@ namespace ChargeStationProject.Test
         {
             _receivedEventArgs = null;
             _uut = new Door();
-            _uut.OpenDoorEvent +=
+           _uut.OpenDoorEvent +=
                 (o, args) =>
                 {
                     _receivedEventArgs = args;
@@ -36,6 +38,13 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
+        public void test()
+        {
+            _uut = new Door();
+            Assert.That(()=> _uut.DoorOpen(), Throws.Nothing);
+        }     
+
+        [Test]
         public void DoorOpen_DoorOpenedIsCalled_EventFired()
         {
 
@@ -45,9 +54,23 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
-        public void DoorOpen_DoorOpenedIsCalled_CorrectBoolReceived()
+        public void EventUnsubscribed_NoMethodIsCalled_EventIsNull()
         {
 
+            //arrange
+            _uut.OpenDoorEvent -=
+                (o, args) =>
+                {
+                    _receivedEventArgs = args;
+                };
+            
+            Assert.That(()=>_uut.DoorOpen(), Throws.Nothing);
+        }
+
+
+        [Test]
+        public void DoorOpen_DoorOpenedIsCalled_CorrectBoolReceived()
+        {
             _uut.DoorOpen();
             Assert.That(_receivedEventArgs.DoorIsOpen, Is.EqualTo(true));
         }
@@ -86,5 +109,7 @@ namespace ChargeStationProject.Test
 
             Assert.That(_uut.IsLocked, Is.False);
         }
+
+       
     }
 }
