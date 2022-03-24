@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace ChargeStationProject.Test
 {
-    public class Tests
+    public class TestDisplay
     {
         private FakeDisplayInstructions _display;
         private FakeDisplayStatus _displayS;
