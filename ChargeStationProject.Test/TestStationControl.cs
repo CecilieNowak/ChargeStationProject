@@ -120,7 +120,7 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
-        public void LadeskabStateIsAvailable_LogFileIsCalled_DoorLockedIsWrittenToFile()
+        public void RfidDetected_ChargeIsConnected_logFileReceivedMethodCall()
         {
             //arrange
             _uut.SetLadeskabState(StationControl.LadeskabState.Available);
@@ -134,7 +134,21 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
-        public void LadeskabStateIsLocked_LogFileIsCalled_DoorUnlockedIsWrittenToFile()
+        public void RfidDetected_ChargeIsNotConnected_logFileDidNotReceiveMethodCall()
+        {
+            //arrange
+            _uut.SetLadeskabState(StationControl.LadeskabState.Available);
+            _chargeControl.Connected = false;
+
+            //act
+            _uut.RfidDetected(12345678);
+
+            //assert
+            _logFile.Received(0).LogDoorLocked(12345678);
+        }
+
+        [Test]
+        public void RfidDetected_ValidRfidEntryRequest_logFileReceivedMethodCall()
         {
             //arrange
             _uut.SetLadeskabState(StationControl.LadeskabState.Locked);
@@ -145,6 +159,20 @@ namespace ChargeStationProject.Test
 
             //assert
             _logFile.Received(1).LogDoorUnlocked(12345678);
+        }
+
+        [Test]
+        public void RfidDetected_NotValidRfidEntryRequest_logFileDidNotReceiveMethodCall()
+        {
+            //arrange
+            _uut.SetLadeskabState(StationControl.LadeskabState.Locked);
+            _rfidReader.ValidateRfidEntryRequest(12345678);
+
+            //act
+            _uut.RfidDetected(20);
+
+            //assert
+            _logFile.Received(0).LogDoorUnlocked(12345678);
         }
 
         [Test]
