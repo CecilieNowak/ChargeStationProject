@@ -40,37 +40,23 @@ namespace ChargeStationProject.Test
         }
 
         [Test]
-        public void RequestEntry_ValidRFID_NotifyEntryGranted()
-        {
-            _RfidReader.ValidateRfidEntryRequest(Arg.Any<int>()).Returns(true);
-            _uut.RfidDetected(12345678);
-            _entryNotification.Received(1).NotifyEntryGranted(Arg.Any<int>());
-        }
-
-
-        [Test]
-        public void RequestEntry_InvalidRFID_NotifyEntryDenied()
-        {
-            _RfidReader.ValidateRfidEntryRequest(Arg.Any<int>()).Returns(false);
-            _uut.RfidDetected(12345678);
-            _entryNotification.Received(1).NotifyEntryDenied(Arg.Any<int>());
-        }
-
-        //[Test]
-        //public void RequestEntry_validRFID_DoorOpens()
+        //public void RequestEntry_ValidRFID_NotifyEntryGranted()
         //{
-        //    _RfidReader.ValidateRfidEntryRequest(12345678).Returns(true);
+        //    _RfidReader.ValidateRfidEntryRequest(Arg.Any<int>()).Returns(true);
         //    _uut.RfidDetected(12345678);
-        //    _door.Received(1).Open();
+        //    _entryNotification.Received(1).NotifyEntryGranted(Arg.Any<int>());
         //}
 
+
         //[Test]
-        //public void RequestEntry_validRFID_DoorCloses()
+        //public void RequestEntry_InvalidRFID_NotifyEntryDenied()
         //{
-        //    _RfidReader.ValidateRfidEntryRequest(12345678).Returns(true);
+        //    _RfidReader.ValidateRfidEntryRequest(Arg.Any<int>()).Returns(false);
         //    _uut.RfidDetected(12345678);
-        //    _door.Received(1).Close();
+        //    _entryNotification.Received(1).NotifyEntryDenied(Arg.Any<int>());
         //}
+
+        
 
 
         //[Test]

@@ -177,5 +177,19 @@ namespace ChargeStationProject.Test
 
             _door.Received(1).UnlockDoor();
         }
+
+
+        [Test]
+        public void RequestEntry_validRFID_DoorCloses()
+        {
+            _uut.SetLadeskabState(StationControl.LadeskabState.Locked);
+            _rfidReader.ValidateRfidEntryRequest(12345678);
+
+            _uut.RfidDetected(12345678);
+
+            _door.Received(1).LockDoor();
+        }
+
+
     }
 }
