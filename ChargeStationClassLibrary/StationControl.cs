@@ -21,7 +21,6 @@ namespace ChargeStationProject
 
         private LadeskabState _state;
         private IChargeControl _chargeControl;
-        private int _oldId;
         private IDoor _door;
         private IDisplay _display; // CBE tilføjet
         private IRfidReader _rfid;
