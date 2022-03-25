@@ -151,11 +151,11 @@ namespace ChargeStationProject.Test
         public void RfidDetected_ValidRfidEntryRequest_logFileReceivedMethodCall()
         {
             //arrange
-            _uut.SetLadeskabState(StationControl.LadeskabState.Locked);
-            _rfidReader.ValidateRfidEntryRequest(12345678);
+            StationControl uutLokal = new StationControl(_door, _display, _chargeControl, _logFile, new RfidReader()); //RfidReader kan ikke være en fake i denne test, fordi .RfidDetected kræver RfidReader-klassen implementation
+            uutLokal.SetLadeskabState(StationControl.LadeskabState.Locked);
 
             //act
-            _uut.RfidDetected(12345678);
+            uutLokal.RfidDetected(12345678);
 
             //assert
             _logFile.Received(1).LogDoorUnlocked(12345678);
@@ -165,11 +165,11 @@ namespace ChargeStationProject.Test
         public void RfidDetected_NotValidRfidEntryRequest_logFileDidNotReceiveMethodCall()
         {
             //arrange
-            _uut.SetLadeskabState(StationControl.LadeskabState.Locked);
-            _rfidReader.ValidateRfidEntryRequest(12345678);
+            StationControl uutLokal = new StationControl(_door, _display, _chargeControl, _logFile, new RfidReader()); //RfidReader kan ikke være en fake i denne test, fordi .RfidDetected kræver RfidReader-klassen implementation
+            uutLokal.SetLadeskabState(StationControl.LadeskabState.Locked);
 
             //act
-            _uut.RfidDetected(20);
+            uutLokal.RfidDetected(20);
 
             //assert
             _logFile.Received(0).LogDoorUnlocked(12345678);
@@ -198,10 +198,10 @@ namespace ChargeStationProject.Test
         [Test]
         public void RequestEntry_validRFID_DoorOpens()
         {
-            _uut.SetLadeskabState(StationControl.LadeskabState.Locked);
-            _rfidReader.ValidateRfidEntryRequest(12345678);
+            StationControl uutLokal = new StationControl(_door, _display, _chargeControl, _logFile, new RfidReader()); //RfidReader kan ikke være en fake i denne test, fordi .RfidDetected kræver RfidReader-klassen implementation
+            uutLokal.SetLadeskabState(StationControl.LadeskabState.Locked);
 
-            _uut.RfidDetected(12345678);
+            uutLokal.RfidDetected(12345678);
 
             _door.Received(1).UnlockDoor();
         }
@@ -210,10 +210,11 @@ namespace ChargeStationProject.Test
         [Test]
         public void RequestEntry_validRFID_DoorCloses()
         {
-            _uut.SetLadeskabState(StationControl.LadeskabState.Locked);
-            _rfidReader.ValidateRfidEntryRequest(12345678);
+            StationControl uutLokal = new StationControl(_door, _display, _chargeControl, _logFile, new RfidReader()); //RfidReader kan ikke være en fake i denne test, fordi .RfidDetected kræver RfidReader-klassen implementation
+            uutLokal.SetLadeskabState(StationControl.LadeskabState.Available);
+            _chargeControl.Connected = true;
 
-            _uut.RfidDetected(12345678);
+            uutLokal.RfidDetected(12345678);
 
             _door.Received(1).LockDoor();
         }
