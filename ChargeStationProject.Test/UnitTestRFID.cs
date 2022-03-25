@@ -27,7 +27,7 @@ namespace ChargeStationProject.Test
         [Test]
         public void RequestEntry_ValidRFID_ReturnTrue()
         {
-            bool rfidEntryRequest = _uut.ValidateRfidEntryRequest(123456789);
+            bool rfidEntryRequest = _uut.ValidateRfidEntryRequest(12345678);
             Assert.That((rfidEntryRequest), Is.True);
         }
 
