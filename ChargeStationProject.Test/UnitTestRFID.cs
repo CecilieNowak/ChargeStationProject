@@ -39,7 +39,7 @@ namespace ChargeStationProject.Test
             Assert.That((rfidEntryRequest), Is.False);
         }
 
-        [Test]
+        //[Test]
         //public void RequestEntry_ValidRFID_NotifyEntryGranted()
         //{
         //    _RfidReader.ValidateRfidEntryRequest(Arg.Any<int>()).Returns(true);
