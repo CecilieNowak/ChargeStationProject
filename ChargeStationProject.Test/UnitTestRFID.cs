@@ -27,8 +27,8 @@ namespace ChargeStationProject.Test
         [Test]
         public void RequestEntry_ValidRFID_ReturnTrue()
         {
-            bool rfidEntryRequest = _uut.ValidateRfidEntryRequest(123456789);
-            Assert.That((rfidEntryRequest),Is.True);
+            bool rfidEntryRequest = _uut.ValidateRfidEntryRequest(12345678);
+            Assert.That((rfidEntryRequest), Is.True);
         }
 
 
@@ -39,7 +39,7 @@ namespace ChargeStationProject.Test
             Assert.That((rfidEntryRequest), Is.False);
         }
 
-        //[Test]
+       // [Test]
         //public void RequestEntry_ValidRFID_NotifyEntryGranted()
         //{
         //    _RfidReader.ValidateRfidEntryRequest(Arg.Any<int>()).Returns(true);
@@ -56,7 +56,7 @@ namespace ChargeStationProject.Test
         //    _entryNotification.Received(1).NotifyEntryDenied(Arg.Any<int>());
         //}
 
-        
+
 
 
         //[Test]
@@ -68,7 +68,7 @@ namespace ChargeStationProject.Test
         //}
 
     }
-    }   
+}
 
 
 
