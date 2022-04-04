@@ -11,7 +11,7 @@ namespace ChargeStationProject
     public class StationControl : IStationControl
     {
         // Enum med tilstande ("states") svarende til tilstandsdiagrammet for klassen
-        public enum LadeskabState
+        private enum LadeskabState
         {
             Available,
             Locked,
@@ -25,6 +25,7 @@ namespace ChargeStationProject
         private IDisplay _display; // CBE tilføjet
         private IRfidReader _rfid;
         private ILogFile _logFile;
+        private int oldId;
       
         // Her mangler constructor
         public StationControl(IDoor door, IDisplay display, IChargeControl chargeControl, ILogFile logFile, IRfidReader rfidReader)
@@ -36,33 +37,32 @@ namespace ChargeStationProject
             _door.OpenDoorEvent += HandleOnOpenDoorEvent;
             _display = display; //CBE tilføjet
             _logFile = logFile;
-            _rfid = rfidReader; 
+            _rfid = rfidReader;
+            _rfid.RFIDChangedEvent += RfidDetected;
 
         }
 
 
 
         // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
-        public void RfidDetected(int id)
+        public void RfidDetected(object sender, RfidEventArgs e)
         {
+
             switch (_state)
             {
                 case LadeskabState.Available:
                     // Check for ladeforbindelse
                     if (_chargeControl.Connected == true) 
                     {
+                        oldId = e.RFID;
                         _door.LockDoor();
                         _chargeControl.startCharge();
-                     
-
-                     _rfid.ValidateRfidEntryRequest(id);
-
-                     _logFile.LogDoorLocked(id);
-
-                    _display.showMessage(
+                        _logFile.LogDoorLocked(e.RFID);
+                        _display.showMessage(
                         "Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."); //tilføjet CBE
-                    _state = LadeskabState.Locked;
+                        _state = LadeskabState.Locked;
                     }
+
                     else
                     {
                         _display.showMessage("Din telefon er ikke ordentlig tilsluttet. Prøv igen."); //tilføjet CBE
@@ -76,36 +76,24 @@ namespace ChargeStationProject
 
                 case LadeskabState.Locked:
                     // Check for correct ID
-                    if (_rfid.ValidateRfidEntryRequest(id) == true)
+                    if (oldId == e.RFID)
                     {
                         _chargeControl.stopCharge();
                         _door.UnlockDoor();
-
-                        _logFile.LogDoorUnlocked(id);
-
-
+                        _logFile.LogDoorUnlocked(e.RFID);
                         _display.showMessage("Tag din telefon ud af skabet og luk døren"); //tilføjet CBE
+
                         _state = LadeskabState.Available;
                     }
-                    else
+                    else if (e.RFID != oldId)
                     {
                         _display.showMessage("Forkert RFID tag"); //tilføjet CBE
                     }
 
-                break;
+                    break;
         }
     }
 
-    public LadeskabState GetLadeskabState()
-        {
-            return _state;
-        }
-
-
-        public void SetLadeskabState(LadeskabState s)
-        { 
-            _state = s;
-        }
 
         // Her mangler de andre trigger handlere
         private void HandleOnOpenDoorEvent(object sender, DoorStateEventArgs e)

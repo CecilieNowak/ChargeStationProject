@@ -53,7 +53,7 @@
 //            string textInFile = reader.ReadLine();
 
 //            //assert
-//            Assert.That(textInFile, Is.EqualTo(DateTime.Today + ": Skab låst med RFID: 20")); 
+//            Assert.That(textInFile, Is.EqualTo(DateTime.Today + ": Skab låst med RFID: 20"));
 //        }
 
 
