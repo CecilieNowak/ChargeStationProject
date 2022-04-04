@@ -118,7 +118,7 @@ namespace ChargeStationProject.Test
         }
 
 
-        //---------RFIDEVENT TEST---------//
+        //---------RFID EVENT TEST---------//
 
         [Test]
         public void LadeskabStateIsAvailable_RFIDChangedEvent_logFileReceivedMethodCall()
@@ -153,6 +153,24 @@ namespace ChargeStationProject.Test
             _logFile.Received(0).LogDoorLocked(1234);
 
             _display.Received(1).showMessage("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
+        }
+
+        [Test]
+        public void LadeskabStateIsDoorOpen_RFIDEventChanged_logFileDidNotReceiveMethodCall()
+        {
+            //arrange - state sættes til available i set up
+         _door.OpenDoorEvent += Raise.EventWith(new DoorStateEventArgs { DoorIsOpen = true }); 
+
+            //act
+            _rfidReader.RFIDChangedEvent += Raise.EventWith(new RfidEventArgs { RFID = 1234 });
+
+            //assert
+
+            _door.Received(0).LockDoor();
+            _chargeControl.Received(0).startCharge();
+            _logFile.Received(0).LogDoorLocked(1234);
+
+            _display.Received(0).showMessage("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
         }
 
         [Test]

@@ -7,6 +7,7 @@ namespace ChargeStationProject
     public interface IDisplay
     {
         public void showMessage(string message);
+        public string SaveMessage { get; set; }
 
     }
 }
