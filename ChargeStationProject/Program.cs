@@ -48,9 +48,8 @@
                 case 'R':
                     System.Console.WriteLine("Indtast RFID id: ");
                     string idString = System.Console.ReadLine();
-
                     int id = Convert.ToInt32(idString);
-                    stationControl.RfidDetected(id);
+                    rfidReader.ValidateRfidEntryRequest(id);
                     break;
 
                 default:

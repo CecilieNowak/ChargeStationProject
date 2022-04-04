@@ -84,6 +84,7 @@ namespace ChargeStationProject
                         _display.showMessage("Tag din telefon ud af skabet og luk døren"); //tilføjet CBE
 
                         _state = LadeskabState.Available;
+                        //oldId = 0; todo - skal slettes?
                     }
                     else if (e.RFID != oldId)
                     {
