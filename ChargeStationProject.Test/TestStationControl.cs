@@ -78,7 +78,6 @@ namespace ChargeStationProject.Test
         public void LadeskabStateIsDoorOpened_DoorIsClosedEvent_showMessageIsCalled()
         {
             //arrange
-            
             _door.OpenDoorEvent += Raise.EventWith(new DoorStateEventArgs() { DoorIsOpen = true }); //Dør ÅBNES her
             
 
@@ -107,7 +106,7 @@ namespace ChargeStationProject.Test
         public void LadeskabStateIsLocked_DoorIsOpenedEvent_showMessageIsCalled()
         {
             //arrange
-            _chargeControl.Connected = true; //TODO er dette black box-agtigt?
+            _chargeControl.Connected = true; //TODO er dette black box-agtigt? stub
             _rfidReader.RFIDChangedEvent += Raise.EventWith(new RfidEventArgs() { RFID = 1234 });
             
             //act
